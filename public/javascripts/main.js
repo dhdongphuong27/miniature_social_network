@@ -102,45 +102,43 @@ function editPost(e){
 function postComment(e) {
     e.preventDefault();
     const btn = e.currentTarget;
-    const commentContentSection = e.currentTarget.parentNode.childNodes[1];
-    if (commentContentSection.value===""){
-        return
-    }
-    let data = {
-        postid: commentContentSection.name,
-        commentcontent: commentContentSection.value,
-    }
-    fetch('/comments/create', {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        headers: {
-            "Content-Type": 'application/json'
-        },
-        body: JSON.stringify(data) // body data type must match "Content-Type" header
-    }).then(response => {
-        if (response.status !== 200) {
-            console.log('Looks like there was a problem. Status Code: + response.status')
-            return;
+    const commentContentSection = e.currentTarget.parentNode.querySelector(".commentContent");
+    if (commentContentSection.value!==""){
+        let data = {
+            postid: commentContentSection.name,
+            commentcontent: commentContentSection.value,
         }
-        // Examine the text in the response
-        response.json().then(function (data) {
-            if (data.success == 'true') {
-                var temp = document.getElementsByTagName("template");
-                var clone = temp[1].content.cloneNode(true);
-                clone.querySelector(".avatar").src = document.getElementById("avt").src;
-                clone.querySelector(".display-name").innerHTML = document.getElementById('username').innerHTML.trim();
-                clone.querySelector(".profilelink").href = "/users/userid/" + "";
-                clone.querySelector(".commentcontent").innerHTML = commentContentSection.value;
-                clone.querySelector(".deleteCmtBtn").addEventListener('click', e => deleteComment(e))
-                clone.querySelector(".deleteCmtBtn").name = data.commentid;
-                btn.parentNode.parentNode.querySelector('.comment-container').append(clone)
-                commentContentSection.value = ""
-            } else {
-                alert(data.err)
+        fetch('/comments/create', {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            headers: {
+                "Content-Type": 'application/json'
+            },
+            body: JSON.stringify(data) // body data type must match "Content-Type" header
+        }).then(response => {
+            if (response.status !== 200) {
+                console.log('Looks like there was a problem. Status Code: + response.status')
+                return;
             }
-        });
+            // Examine the text in the response
+            response.json().then(function (data) {
+                if (data.success == 'true') {
+                    var temp = document.getElementsByTagName("template");
+                    var clone = temp[1].content.cloneNode(true);
+                    clone.querySelector(".avatar").src = document.getElementById("avt").src;
+                    clone.querySelector(".display-name").innerHTML = document.getElementById('username').innerHTML.trim();
+                    clone.querySelector(".profilelink").href = "/users/userid/" + "";
+                    clone.querySelector(".commentcontent").innerHTML = commentContentSection.value;
+                    clone.querySelector(".deleteCmtBtn").addEventListener('click', e => deleteComment(e))
+                    clone.querySelector(".deleteCmtBtn").name = data.commentid;
+                    btn.parentNode.parentNode.querySelector('.comment-container').append(clone)
+                    commentContentSection.value = ""
+                } else {
+                    alert(data.err)
+                }
+            });
 
-    })
-    return;
+        })
+    }
 }
 function removeAllChildNodes(parent) {
     while (parent.firstChild) {
@@ -171,15 +169,16 @@ function showComments(e) {
             })
         })
     })
-
     btn.parentNode.querySelector(".hideCommentsBtn").style.display = "block";
     btn.style.display = "none";
+    console.log("show cmt");
 }
 function hideComments(e){
     const btn = e.currentTarget;
     removeAllChildNodes(btn.parentNode.parentNode.querySelector('.comment-container'));
     btn.parentNode.querySelector(".showCommentsBtn").style.display = "block";
     btn.style.display = "none";
+    console.log("hide cmt");
 }
 function getPosts(route,prepend) {
     fetch(route).then(response => {
@@ -251,18 +250,16 @@ function getPosts(route,prepend) {
             deletePostBtns.forEach(button => {
                 button.addEventListener('click', e => deletePost(e))
             })
-            const commentBtns = [].slice.call(document.getElementsByClassName('commentBtn'))
-            commentBtns.forEach(button => {
-                button.addEventListener('click', e => postComment(e))
-            })
-            const showCommentsBtns = [].slice.call(document.getElementsByClassName('showCommentsBtn'))
-            showCommentsBtns.forEach(button => {
-                button.addEventListener('click', e => showComments(e))
-            })
-            const hideCommentsBtns = [].slice.call(document.getElementsByClassName('hideCommentsBtn'))
-            hideCommentsBtns.forEach(button => {
-                button.addEventListener('click', e => hideComments(e))
-            })
+            $(".commentBtn").unbind().click(function (e) {
+                console.log("post comment")
+                postComment(e)
+            });
+            $(".showCommentsBtn").unbind().click(function (e) {
+                showComments(e)
+            });
+            $(".hideCommentsBtn").unbind().click(function (e) {
+                hideComments(e)
+            });
         })
     })
 }
@@ -327,6 +324,8 @@ function postBtn(e){
                 clone.querySelector(".savePostBtn").addEventListener('click', e => editPost(e))
                 clone.querySelector(".deletePostBtn").addEventListener('click', e => deletePost(e))
                 clone.querySelector(".deletePostBtn").name = data.postid;
+                clone.querySelector(".commentBtn").addEventListener('click', e => postComment(e))
+
                 var editEl = clone.querySelector(".editcontent");
                 editEl.value = document.getElementById('postcontent').value;
                 editEl.name = data.postid;
