@@ -119,8 +119,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-httpServer.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
-});
+httpServer.listen(process.env.PORT || 3000)
 
 module.exports = app;
