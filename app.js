@@ -52,9 +52,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new GoogleStrategy({
-    clientID: '278695142993-ji38cidlta9f9u09e1p8mg3up8pcfi2m.apps.googleusercontent.com',
-    clientSecret: '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',
-    callbackURL: 'http://localhost:3000/auth/google/callback'
+    clientID: credentials.clientID,
+    clientSecret: credentials.clientSecret,
+    callbackURL: credentials.callbackURL
   },
   function(accessToken, refreshToken, profile, done){
     const email = profile.emails[0].value;
