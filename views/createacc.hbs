@@ -1,0 +1,133 @@
+<div class="container-fluid h-100 gedf-wrapper">
+    <div class="row h-100">
+        <div class="col-md-2" id="LSidebar">
+            <div class="row h-25 sidebar-header">
+                <a href="#">
+                    <div class="col-md-12">
+                        <p id="username" class="text-center font-weight-light">{{user.name}}</p>
+                        <img id="avt" src={{user.avatar}} class="avatar border border-dark rounded-circle" width="80"
+                            height="80" />
+                    </div>
+                </a>
+            </div>
+            <div class="row h-75 sidebar-body bg-dark">
+                <div class="col-md-12">
+                    <ul class="list-goup list-unstyled">
+                        <li><a href="/" class="bg-dark list-group-item text-light">Main page</a></li>
+                        <li><a href="/createacc" class="bg-secondary list-group-item text-light">Create account</a></li>
+                        <li><a href="/users/signout" class="bg-dark list-group-item text-light">Sign out</a></li>
+                        <li><a id="userid" class="bg-dark list-group-item text-light d-none">{{user.id}}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7 gedf-main">
+            <form>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Email</label>
+                    <input type="email" class="form-control" id="email" aria-describedby="emailHelp"
+                        placeholder="Username">
+                    <small id="emailHelp" class="form-text text-muted"></small>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input type="password" class="form-control" id="pwd" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Faculty:</label>
+                    <input type="text" class="form-control" id="name" placeholder="Faculty name">
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Phòng Công tác học sinh sinh viên (CTHSSV)" id="1">
+                    <label class="form-check-label" for="1">Phòng Công tác học sinh sinh viên (CTHSSV)</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Phòng Đại học" id="2">
+                    <label class="form-check-label" for="2">Phòng Đại học</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Phòng Sau đại học" id="3">
+                    <label class="form-check-label" for="3">Phòng Sau đại học</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Phòng điện toán và máy tính" id="4">
+                    <label class="form-check-label" for="4">Phòng điện toán và máy tính</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Phòng khảo thí và kiểm định chất lượng" id="5">
+                    <label class="form-check-label" for="5">Phòng khảo thí và kiểm định chất lượng</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Phòng tài chính" id="6">
+                    <label class="form-check-label" for="6">Phòng tài chính</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="TDT Creative Language Center" id="7">
+                    <label class="form-check-label" for="7">TDT Creative Language Cente</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Trung tâm tin học" id="8">
+                    <label class="form-check-label" for="8">Trung tâm tin học</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Trung tâm đào tạo phát triển xã hội (SDTC)" id="9">
+                    <label class="form-check-label" for="9">Trung tâm đào tạo phát triển xã hội (SDTC)</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Trung tâm phát triển Khoa học quản lý và Ứng dụng công nghệ (ATEM)" id="10">
+                    <label class="form-check-label" for="10">Trung tâm phát triển Khoa học quản lý và Ứng dụng công nghệ (ATEM)</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Trung tâm hợp tác doanh nghiệp và cựu sinh viên" id="11">
+                    <label class="form-check-label" for="11">Trung tâm hợp tác doanh nghiệp và cựu sinh viên</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Khoa Luật" id="12">
+                    <label class="form-check-label" for="12">Khoa Luật</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Trung tâm ngoại ngữ - tin học – bồi dưỡng văn hóa" id="13">
+                    <label class="form-check-label" for="13">Trung tâm ngoại ngữ - tin học – bồi dưỡng văn hóa</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Viện chính sách kinh tế và kinh doanh" id="14">
+                    <label class="form-check-label" for="14">Viện chính sách kinh tế và kinh doanh</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Khoa Mỹ thuật công nghiệp" id="15">
+                    <label class="form-check-label" for="15">Khoa Mỹ thuật công nghiệp</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Khoa Điện – Điện tử" id="16">
+                    <label class="form-check-label" for="16">Khoa Điện – Điện tử</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Khoa Công nghệ thông tin" id="17">
+                    <label class="form-check-label" for="17">Khoa Công nghệ thông tin</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Khoa Quản trị kinh doanh" id="18">
+                    <label class="form-check-label" for="18">Khoa Quản trị kinh doanh</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Khoa Môi trường và bảo hộ lao động" id="19">
+                    <label class="form-check-label" for="19">Khoa Môi trường và bảo hộ lao động</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Khoa Lao động công đoàn" id="20">
+                    <label class="form-check-label" for="20">Khoa Lao động công đoàn</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Khoa Tài chính ngân hàng" id="21">
+                    <label class="form-check-label" for="21">Khoa Tài chính ngân hàng</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Khoa giáo dục quốc tế" id="22">
+                    <label class="form-check-label" for="22">Khoa giáo dục quốc tế</label>
+                </div>
+                
+                <button type="submit" id="createBtn" class="btn btn-primary">Create</button>
+            </form>
+        </div>
+    </div>
+</div>

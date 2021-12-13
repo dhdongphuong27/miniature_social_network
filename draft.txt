@@ -1,0 +1,88 @@
+<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Phòng Công tác học sinh sinh viên (CTHSSV)" id="1">
+                    <label class="form-check-label" for="1">
+</label>
+<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Phòng Đại học" id="1">
+                    <label class="form-check-label" for="1">
+</label>
+<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Phòng Sau đại học" id="1">
+                    <label class="form-check-label" for="1">
+</label>
+<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Phòng điện toán và máy tính" id="1">
+                    <label class="form-check-label" for="1">
+</label>
+<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Phòng khảo thí và kiểm định chất lượng" id="1">
+                    <label class="form-check-label" for="1">
+</label>
+<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Phòng tài chính" id="1">
+                    <label class="form-check-label" for="1">
+</label>
+<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="TDT Creative Language Center" id="1">
+                    <label class="form-check-label" for="1">
+</label>
+<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Trung tâm tin học" id="1">
+                    <label class="form-check-label" for="1">
+</label>
+<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Trung tâm đào tạo phát triển xã hội (SDTC)" id="1">
+                    <label class="form-check-label" for="1">
+</label>
+<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Trung tâm phát triển Khoa học quản lý và Ứng dụng công nghệ (ATEM)" id="1">
+                    <label class="form-check-label" for="1">
+</label>
+<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Trung tâm hợp tác doanh nghiệp và cựu sinh viên" id="1">
+                    <label class="form-check-label" for="1">
+</label>
+<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Khoa Luật" id="1">
+                    <label class="form-check-label" for="1">
+</label>
+<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Trung tâm ngoại ngữ - tin học – bồi dưỡng văn hóa" id="1">
+                    <label class="form-check-label" for="1">
+</label>
+<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Viện chính sách kinh tế và kinh doanh" id="1">
+                    <label class="form-check-label" for="1">
+</label>
+<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Khoa Mỹ thuật công nghiệp" id="1">
+                    <label class="form-check-label" for="1">
+</label>
+<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Khoa Điện – Điện tử" id="1">
+                    <label class="form-check-label" for="1">
+</label>
+<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Khoa Công nghệ thông tin" id="1">
+                    <label class="form-check-label" for="1">
+</label>
+<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Khoa Quản trị kinh doanh" id="1">
+                    <label class="form-check-label" for="1">
+</label>
+<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Khoa Môi trường và bảo hộ lao động" id="1">
+                    <label class="form-check-label" for="1">
+</label>
+<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Khoa Lao động công đoàn" id="1">
+                    <label class="form-check-label" for="1">
+</label>
+<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Khoa Tài chính ngân hàng" id="1">
+                    <label class="form-check-label" for="1">
+</label>
+<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Khoa giáo dục quốc tế" id="1">
+                    <label class="form-check-label" for="1">
+</label>

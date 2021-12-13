@@ -1,0 +1,12 @@
+new Post({
+ownerId: fields.ownerId,
+ownerName: fields.ownerName,
+ownerAvatar: fields.ownerAvatar,
+created_at: new Date(),
+content: fields.content,
+imageSrc: files.image._writeStream.path
+}).save(function (error) {
+if (error) {
+console.log(error);
+}
+})

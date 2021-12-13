@@ -1,0 +1,138 @@
+<div class="container-fluid h-100 gedf-wrapper">
+    <div class="row h-100">
+        <div class="col-md-2" id="LSidebar">
+            <div class="row h-25 sidebar-header">
+                <a href="#">
+                    <div class="col-md-12">
+                        <p id="username" class="text-center font-weight-light">{{user.name}}</p>
+                        <img id="avt" src={{user.avatar}} class="avatar border border-dark rounded-circle"
+                            width="80" height="80" />
+                    </div>
+                </a>
+            </div>
+            <div class="row h-75 sidebar-body bg-dark">
+                <div class="col-md-12">
+                    <ul class="list-goup list-unstyled">
+                        <li><a href="/" class="bg-secondary list-group-item text-light">Main page</a></li>
+                        <li><a href="/createacc" class="bg-dark list-group-item text-light">Create account</a></li>
+                        <li><a href="/users/signout" class="bg-dark list-group-item text-light">Sign out</a></li>
+                        <li><a id="userid" class="bg-dark list-group-item text-light d-none">{{user.id}}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7 gedf-main">
+            <div id="newsfeed">
+                <template>
+                    <div class="card gedf-card">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="mr-2">
+                                        <img class="rounded-circle avatar" width="45" src="/images/defaultavt.png" alt="">
+                                    </div>
+                                    <div class="ml-2 pt-3 pl-2">
+                                        <a class="profilelink">
+                                            <div class="h5 m-0 display-name"></div>
+                                        </a>
+                                        <div class="text-muted h7 mb-2">
+                                            <p class="created-at" title=""><i class="fa fa-clock-o"></i>10 min ago</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-ellipsis-h"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
+                                            <button type="button" class="editPostBtn dropdown-item btn btn-primary">Edit
+                                                post</button>
+                                            <button type="button" class="deletePostBtn dropdown-item btn btn-primary">Delete
+                                                post</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+            
+                        </div>
+                        <div class="card-body">
+            
+                            <p class="card-text statuscontent">
+                                Hello world! aduuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu....
+                            </p>
+                            <form class="editPostForm">
+                                <textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
+                                    name="editcontent" class="form-control editcontent" rows="2" placeholder="" required></textarea>
+                                <button class="btn btn-dark savePostBtn">Save</button>
+                            </form>
+            
+                            <a class="video-link"></a>
+            
+                        </div>
+                        <div class="video-container">
+                            <iframe class="video" src="https://www.youtube.com/embed/AGepNnFXd3c" title="YouTube video player"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
+                        </div>
+            
+                        <img src="" class="postImg" />
+                        <!-- Template for comment -->
+            
+                        <div class="card-footer">
+                            <div class="pb-2">
+            
+                                <button type="button" class="btn btn-outline-primary custombtn showCommentsBtn" name="aslkdnas"><i
+                                        class="fa fa-comment"></i> Load comments</button>
+                                <button type="button" class="btn btn-outline-primary custombtn hideCommentsBtn" name="aslkdnas"><i
+                                        class="fa fa-comment"></i> Hide comments</button>
+                            </div>
+                            <div class="comment-container">
+            
+                            </div>
+                            <form>
+                                <textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
+                                    name="comment" class="form-control commentContent" rows="2" placeholder="" required></textarea>
+                                <button class="btn btn-dark commentBtn">Comment</button>
+                            </form>
+                        </div>
+                    </div>
+                </template>
+                <template>
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="mr-2">
+                                    <img class="rounded-circle avatar" width="45" src="/images/defaultavt.png" alt="">
+                                </div>
+                                <div class="ml-2 pt-3 pl-2">
+                                    <a class="profilelink" href="#">
+                                        <div class="h5 m-0 display-name">samldkamslk</div>
+                                    </a>
+                                    <div class="text-muted h7 mb-2">
+                                        <p class="commentcontent" title="">askndiasdkasdmaslkdanslk</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="dropdown">
+                                    <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-ellipsis-h"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
+                                        <button type="button" name="commentid"
+                                            class="deleteCmtBtn dropdown-item btn btn-primary">Xóa
+                                            bình luận</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+</div>
