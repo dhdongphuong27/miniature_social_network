@@ -7,7 +7,7 @@ module.exports = {
     },
     "clientID": "278695142993-ji38cidlta9f9u09e1p8mg3up8pcfi2m.apps.googleusercontent.com",
     "clientSecret": "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",
-    //"callbackURL": "https://do-an-cuoi-ky-webnc.herokuapp.com/auth/google/callback"
-    "callbackURL": "https://localhost:3000/auth/google/callback"
+    "callbackURL": "https://do-an-cuoi-ky-webnc.herokuapp.com/auth/google/callback"
+    //"callbackURL": "https://localhost:3000/auth/google/callback"
 
 }
