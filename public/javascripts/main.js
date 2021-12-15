@@ -50,7 +50,7 @@ $(document).ready(function () {
         var notiPageNum = 1;
         getSpecificNotifications(category, titlesearch, contentsearch, notiPageNum, 10)
         getNumberofPages();
-        document.getElementById("searchNotiBtn").addEventListener('click', e => searchNoti(category, titlesearch, contentsearch, notiPageNum))
+        document.getElementById("searchNotiBtn").addEventListener('click', e => searchNoti(notiPageNum))
     }
     else if (page =="createacc")
     {
@@ -94,7 +94,10 @@ function loadPage(e) {
     contentsearch = document.querySelector("#contentsearch").value;
     getSpecificNotifications(category, titlesearch, contentsearch, e.currentTarget.innerHTML, 10);
 }
-function searchNoti(category, titlesearch, contentsearch, notiPageNum){
+function searchNoti(notiPageNum){
+    category = document.querySelector("#category").value;
+    titlesearch = document.querySelector("#titlesearch").value;
+    contentsearch = document.querySelector("#contentsearch").value;
     getSpecificNotifications(category, titlesearch, contentsearch, notiPageNum, 10)
 }
 function getSpecificNotifications(facultyid, title, content, notiPageNum, notiLimit){
