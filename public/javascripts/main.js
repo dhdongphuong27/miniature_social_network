@@ -543,7 +543,7 @@ function createAccount(e){
         }
         response.json().then(function (data) {
             if (data.success == 'true') {
-                
+                document.querySelector(".createAccForm").reset()
             } else {
                 alert(data.err)
             }
@@ -575,8 +575,8 @@ function postNoti(e){
         }
         response.json().then(function (data) {
             if (data.success == 'true') {
-                console.log("Successfully")
-                //Empty the textarea and send message to socket.io server 
+                document.querySelector(".postNotiForm").reset()
+                //send message to socket.io server 
             } else {
                 alert(data.err)
             }
