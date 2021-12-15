@@ -2,7 +2,7 @@
     <div class="row h-100">
         <div class="col-md-2" id="LSidebar">
             <div class="row sidebar-header">
-                <a href="/users/userid/{{user.id}}">
+                <a href="/users/userid/{{user._id}}">
                     <div class="col-md-12">
                         <p id="username" class="text-center font-weight-light">{{user.name}}</p>
                         <img id="avt" src={{user.avatar}} class="avatar border border-dark rounded-circle" width="80"
@@ -15,51 +15,14 @@
                     <ul class="list-goup list-unstyled">
                         <li><a href="/" class="bg-dark list-group-item text-light">News feed</a></li>
                         <li><a href="#" class="bg-dark list-group-item text-light">Management</a></li>
-                        <li><a href="#" class="bg-dark list-group-item text-light">Notification</a></li>
+                        <li><a href="/notifications" class="bg-dark list-group-item text-light">Notification</a></li>
                         <li><a href="/users/signout" class="bg-dark list-group-item text-light">Sign out</a></li>
-                        <li><a id="userid" class="bg-dark list-group-item text-light d-none">{{user.id}}</a></li>
+                        <li><a id="userid" class="bg-dark list-group-item text-light d-none">{{user._id}}</a></li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="col-md-7 gedf-main pageCenter">
-            <form id="postForm">
-                <div class="card gedf-card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-1 d-flex justify-content-center">
-                                <img src={{user.avatar}} class="rounded-circle" width="40" height="40" />
-                            </div>
-                            <div class="col-md-11">
-                                <textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
-                                    name="postcontent" id="postcontent" class="form-control" rows="2"
-                                    placeholder="Whats in your mind today?" required></textarea>
-                                <textarea name="videoinput" id="videoinput" class="form-control" rows="1"
-                                    placeholder="Attach a youtube video to your post"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="row">
-                            <div class="col-md-4 d-flex justify-content-center">
-                                <label for="file-upload" class="btn btn-light custom-file-upload">
-                                    <a><i class="fa fa-file"></i> Photos</a>
-                                </label>
-                                <input id="file-upload" type="file" />
-                            </div>
-                            <div class="col-md-4 d-flex justify-content-center">
-                                <button type="button" id="toggleVideoBtn" class="btn btn-light"><i
-                                        class="fa fa-tag"></i> Videos</button>
-                            </div>
-                            <div class="col-md-4 d-flex justify-content-center">
-                                <button type="button" class="btn btn-light"><i class="fa fa-cog"></i>
-                                    Feeling/Activity</button>
-                            </div>
-                            <button type="button" class="btn btn-dark" id="postBtn">Post</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
             <div id="newsfeed">
                 <template>
                     <div class="card gedf-card">
@@ -80,7 +43,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="dropdown">
+                                    <div class="dropdown modifyContent">
                                         <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fa fa-ellipsis-h"></i>
@@ -119,7 +82,6 @@
                         </div>
 
                         <img src="" class="postImg" />
-                        <!-- Template for comment -->
 
                         <div class="card-footer">
                             <div class="pb-2">
@@ -132,12 +94,10 @@
                             <div class="comment-container">
 
                             </div>
-                            <form>
-                                <textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
-                                    name="comment" class="form-control commentContent" rows="2" placeholder=""
-                                    required></textarea>
-                                <button class="btn btn-dark commentBtn">Comment</button>
-                            </form>
+                            <textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
+                                name="comment" class="form-control commentContent" rows="2" placeholder=""
+                                required></textarea>
+                            <button class="btn btn-dark commentBtn">Comment</button>
                         </div>
                     </div>
                 </template>
@@ -158,7 +118,7 @@
                                 </div>
                             </div>
                             <div>
-                                <div class="dropdown">
+                                <div class="dropdown modifyContent">
                                     <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1"
                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fa fa-ellipsis-h"></i>
@@ -182,7 +142,7 @@
             <div class="row h-100">
                 <div class="col-md-12 RSidebar-content">
                     <div>
-                        <h5>Thông tin sinh viên</h5>
+                        <h5>Thông tin</h5>
                     </div>
                     
                 </div>

@@ -2,7 +2,7 @@
     <div class="row h-100">
         <div class="col-md-2" id="LSidebar">
             <div class="row sidebar-header">
-                <a href="/users/userid/{{user.id}}">
+                <a href="/users/userid/{{user._id}}">
                     <div class="col-md-12">
                         <p id="username" class="text-center font-weight-light">{{user.name}}</p>
                         <img id="avt" src={{user.avatar}} class="avatar border border-dark rounded-circle" width="80"
@@ -15,9 +15,9 @@
                     <ul class="list-goup list-unstyled">
                         <li><a href="/" class="bg-dark list-group-item text-light">News feed</a></li>
                         <li><a href="#" class="bg-dark list-group-item text-light">Management</a></li>
-                        <li><a href="#" class="bg-dark list-group-item text-light">Notification</a></li>
+                        <li><a href="/notifications" class="bg-dark list-group-item text-light">Notification</a></li>
                         <li><a href="/users/signout" class="bg-dark list-group-item text-light">Sign out</a></li>
-                        <li><a id="userid" class="bg-dark list-group-item text-light d-none">{{user.id}}</a></li>
+                        <li><a id="userid" class="bg-dark list-group-item text-light d-none">{{user._id}}</a></li>
                     </ul>
                 </div>
             </div>
@@ -75,7 +75,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="dropdown">
+                                    <div class="dropdown modifyContent">
                                         <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown"
                                             aria-haspopup="true" aria-expanded="false">
                                             <i class="fa fa-ellipsis-h"></i>
@@ -110,7 +110,6 @@
                         </div>
                         
                         <img src="" class="postImg" />
-                        <!-- Template for comment -->
                         
                         <div class="card-footer">
                             <div class="pb-2">
@@ -146,7 +145,7 @@
                                 </div>
                             </div>
                             <div>
-                                <div class="dropdown">
+                                <div class="dropdown modifyContent">
                                     <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false">
                                         <i class="fa fa-ellipsis-h"></i>

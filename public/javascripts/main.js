@@ -1,10 +1,142 @@
+$(document).ready(function () {
+    var path = window.location.pathname;
+    var page = path.split("/").pop();
+    if (page=="")
+    {
+        var pageNum = 1
+        const limit = 10
+        getPosts("/posts/list/page/" + pageNum + "/limit/" + limit, "");
+        window.onscroll = () => {
+            if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+                pageNum = pageNum+1;
+                getPosts("/posts/list/page/" + pageNum + "/limit/" + limit, "");
+            }
+        }
+        try{ //only student can run this code
+            document.getElementById("postBtn").addEventListener('click', e => postBtn(e));
+            document.getElementById('toggleVideoBtn').onclick = function (e) {
+                var videoinput = document.getElementById("videoinput");
+                if (videoinput.style.display === "none") {
+                    videoinput.style.display = "block";
+                } else {
+                    videoinput.style.display = "none";
+                }
+            }
+            var notiPageNum = 1
+            const notiLimit = 10
+            getNotifications(notiPageNum, notiLimit);
+            const rightSidebar = document.querySelector("#RSidebar .RSidebar-content");
+            rightSidebar.onscroll = () => {
+                if (rightSidebar.offsetHeight + rightSidebar.scrollTop >= rightSidebar.scrollHeight) {
+                    notiPageNum = notiPageNum+1;
+                    getNotifications(notiPageNum, notiLimit);
+                }
+            }
+        }catch(e){
+            console.log(e)
+        }
+        try {
+            document.getElementById("postNotiBtn").addEventListener('click', e => postNoti(e));
+        } catch (e) {
+
+        }
+        
+    }
+    else if (page == "notifications")
+    {
+        var category = "";
+        var titlesearch = "";
+        var contentsearch = "";
+        var notiPageNum = 1;
+        getSpecificNotifications(category, titlesearch, contentsearch, notiPageNum, 10)
+        getNumberofPages();
+        document.getElementById("searchNotiBtn").addEventListener('click', e => searchNoti(category, titlesearch, contentsearch, notiPageNum))
+    }
+    else if (page =="createacc")
+    {
+        document.getElementById("createBtn").addEventListener('click', e => createAccount(e))
+    }
+    else
+    {  //user profile
+        var pageNum = 1
+        const limit = 10
+        getPosts("/posts/list/userid/"+page+"/page/" + pageNum + "/limit/" + limit, "../.");
+        window.onscroll = () => {
+            if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+                pageNum = pageNum + 1;
+                getPosts("/posts/list/userid/" + page + "/page/" + pageNum + "/limit/" + limit, "../.");
+            }
+        }
+    }
+})
+function getNumberofPages(){
+    fetch("/notifications/numpage").then(response =>{
+        if (response.status !== 200) {
+            console.log('Looks like there was a problem. Status Code:' + response.status)
+            return;
+        }
+        response.json().then(data => {
+            var num = parseInt(data)
+            var page = Math.ceil(num / 10)
+            console.log(page)
+            for (var i = 1; i <= page; i++){
+                var clone = document.getElementsByTagName("template")[1].content.cloneNode(true);
+                clone.querySelector(".btn").innerHTML = i;
+                clone.querySelector(".btn").addEventListener('click', e => loadPage(e))
+                document.querySelector(".page").append(clone)
+            }
+        })
+    })
+}
+function loadPage(e) {
+    category = document.querySelector("#category").value;
+    titlesearch = document.querySelector("#titlesearch").value;
+    contentsearch = document.querySelector("#contentsearch").value;
+    getSpecificNotifications(category, titlesearch, contentsearch, e.currentTarget.innerHTML, 10);
+}
+function searchNoti(category, titlesearch, contentsearch, notiPageNum){
+    getSpecificNotifications(category, titlesearch, contentsearch, notiPageNum, 10)
+}
+function getSpecificNotifications(facultyid, title, content, notiPageNum, notiLimit){
+    if (facultyid === "") facultyid = "-";
+    if (title === "") title = "-";
+    if (content === "") content = "-";
+    fetch("/notifications/slist/facultyid/"+facultyid+"/title/"+title+"/content/"+content+"/page/" + notiPageNum + "/limit/" + notiLimit)
+    .then(response => {
+        if (response.status !== 200) {
+            console.log('Looks like there was a problem. Status Code:' + response.status)
+            return;
+        }
+        response.json().then(data => {
+
+            removeAllChildNodes(document.querySelector("#notificationlist"))
+            for (let i = 0; i < data.length; i++) {
+                var clone = document.getElementsByTagName("template")[0].content.cloneNode(true);
+                clone.querySelector(".notiTitle").innerHTML = data[i].title;
+                clone.querySelector(".desc").innerHTML = data[i].content;
+                clone.querySelector(".created-at").innerHTML = moment(data[i].created_at).format('MMMM Do YYYY');
+                clone.querySelector(".categoryName").innerHTML = data[i].categoryName;
+
+                document.querySelector("#notificationlist").append(clone)
+            }
+        })
+    })
+}
 function toggleFormEdit(e) {
     const formEdit = e.currentTarget.parentNode.parentNode.parentNode
         .parentNode.parentNode.parentNode.querySelector(".editPostForm");
     const content = e.currentTarget.parentNode.parentNode.parentNode
-        .parentNode.parentNode.parentNode.querySelector(".status");
+        .parentNode.parentNode.parentNode.querySelector(".statuscontent");
     content.style.display = "none";
     formEdit.style.display = 'block';
+}
+function removeNotOwned(){
+    var postsdropdown = document.getElementsByClassName("modifyContent")
+    for (var i = 0; i < postsdropdown.length; i++) {
+        if (postsdropdown[i].name !== document.getElementById('userid').innerHTML.trim()) {
+            postsdropdown[i].style.display = "none";
+        }
+    }
 }
 function deletePost(e){
     const postId = e.currentTarget.name;
@@ -153,6 +285,7 @@ function showComments(e) {
             return;
         }
         response.json().then(data => {
+            removeAllChildNodes(btn.parentNode.parentNode.querySelector('.comment-container'));
             for (let i = 0; i < data.length; i++) {
                 var temp = document.getElementsByTagName("template");
                 var clone = temp[1].content.cloneNode(true);
@@ -161,24 +294,20 @@ function showComments(e) {
                 clone.querySelector(".profilelink").href = "/users/userid/" + data[i].ownerId;
                 clone.querySelector(".commentcontent").innerHTML = data[i].content;
                 clone.querySelector(".deleteCmtBtn").name = data[i]._id;
+                clone.querySelector(".modifyContent").name = data[i].ownerId;
                 btn.parentNode.parentNode.querySelector('.comment-container').append(clone)
             }
             const deleteCommentBtns = [].slice.call(document.getElementsByClassName('deleteCmtBtn'))
             deleteCommentBtns.forEach(button => {
                 button.addEventListener('click', e => deleteComment(e))
             })
+            removeNotOwned()
         })
     })
-    btn.parentNode.querySelector(".hideCommentsBtn").style.display = "block";
-    btn.style.display = "none";
-    console.log("show cmt");
 }
 function hideComments(e){
     const btn = e.currentTarget;
     removeAllChildNodes(btn.parentNode.parentNode.querySelector('.comment-container'));
-    btn.parentNode.querySelector(".showCommentsBtn").style.display = "block";
-    btn.style.display = "none";
-    console.log("hide cmt");
 }
 function getPosts(route,prepend) {
     fetch(route).then(response => {
@@ -213,6 +342,7 @@ function getPosts(route,prepend) {
                 createdAtEl.title = moment(data[i].created_at).format('MMMM Do YYYY, h:mm:ss a');
                 var showCommentsBtn = clone.querySelector('.showCommentsBtn')
                 showCommentsBtn.name = data[i]._id;
+                clone.querySelector(".modifyContent").name = data[i].ownerId;
                 clone.querySelector(".deletePostBtn").name = data[i]._id;
                 var postImg = clone.querySelector(".postImg");
                 var videoEl = clone.querySelector(".video");
@@ -227,7 +357,14 @@ function getPosts(route,prepend) {
                     if (data[i].videoSrc !== "") {
                         var videoSrc = data[i].videoSrc;
                         videoSrc = videoSrc.replace("watch?v=", "embed/");
-                        videoEl.src = videoSrc;
+                        var videoSrc1 = ""
+                        for (var j = 0; j < videoSrc.length; j++) {
+                            if (videoSrc[j]==="&"){
+                                break;
+                            }
+                            videoSrc1 += videoSrc[j]
+                        }
+                        videoEl.src = videoSrc1;
                         videoEl.width = "100%";
                     } else {
                         videoEl.style.display = "none";
@@ -260,6 +397,7 @@ function getPosts(route,prepend) {
             $(".hideCommentsBtn").unbind().click(function (e) {
                 hideComments(e)
             });
+            removeNotOwned();
         })
     })
 }
@@ -271,17 +409,20 @@ function getNotifications(notiPageNum, notiLimit){
         }
         response.json().then(data => {
             for (let i = 0; i < data.length; i++) {
-                var temp = document.getElementsByTagName("template");
-                var clone = temp[2].content.cloneNode(true);
-                clone.querySelector(".falcutyname").innerHTML = data[i].ownerName;
-                clone.querySelector(".contentsummary").innerHTML = data[i].content.slice(0, 70);
-                clone.querySelector(".created-at").innerHTML = moment(data[i].created_at).format("Do MMM YYYY");
-                clone.querySelector(".notiTitle").href = "/gotothislink";
-                clone.querySelector(".notiTitle").innerHTML = data[i].title;
-                document.getElementById("notiList").append(clone);
+                addOneNotification(data[i])
             }
         })
     })
+}
+function addOneNotification(noti){
+    var temp = document.getElementsByTagName("template");
+    var clone = temp[2].content.cloneNode(true);
+    clone.querySelector(".falcutyname").innerHTML = noti.ownerName;
+    clone.querySelector(".contentsummary").innerHTML = noti.content.slice(0, 70);
+    clone.querySelector(".created-at").innerHTML = moment(noti.created_at).format("Do MMM YYYY");
+    clone.querySelector(".notiTitle").href = "/notifications/details/" + noti._id;
+    clone.querySelector(".notiTitle").innerHTML = noti.title;
+    document.getElementById("notiList").append(clone);
 }
 function postBtn(e){
     e.preventDefault();
@@ -351,7 +492,14 @@ function postBtn(e){
                     postImg.style.display = "none";
                     if (videoSrc !== "") {
                         videoSrc = videoSrc.replace("watch?v=", "embed/");
-                        videoEl.src = videoSrc;
+                        var videoSrc1 = ""
+                        for (var j = 0; j < videoSrc.length; j++) {
+                            if (videoSrc[j] === "&") {
+                                break;
+                            }
+                            videoSrc1 += videoSrc[j]
+                        }
+                        videoEl.src = videoSrc1;
                     } else {
                         videoEl.style.display = "none";
                         clone.querySelector(".video-container").style.display = "none";
@@ -437,64 +585,4 @@ function postNoti(e){
     })
 }
 
-$(document).ready(function () {
-    var path = window.location.pathname;
-    var page = path.split("/").pop();
-    if (page=="")
-    {
-        var pageNum = 1
-        const limit = 10
-        getPosts("/posts/list/page/" + pageNum + "/limit/" + limit, "");
-        window.onscroll = () => {
-            if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
-                pageNum = pageNum+1;
-                getPosts("/posts/list/page/" + pageNum + "/limit/" + limit, "");
-            }
-        }
-        try{ //student
-            document.getElementById("postBtn").addEventListener('click', e => postBtn(e));
-            document.getElementById('toggleVideoBtn').onclick = function (e) {
-                var videoinput = document.getElementById("videoinput");
-                if (videoinput.style.display === "none") {
-                    videoinput.style.display = "block";
-                } else {
-                    videoinput.style.display = "none";
-                }
-            }
-            var notiPageNum = 1
-            const notiLimit = 10
-            getNotifications(notiPageNum, notiLimit);
-            const rightSidebar = document.querySelector("#RSidebar .RSidebar-content");
-            rightSidebar.onscroll = () => {
-                if (rightSidebar.offsetHeight + rightSidebar.scrollTop >= rightSidebar.scrollHeight) {
-                    notiPageNum = notiPageNum+1;
-                    getNotifications(notiPageNum, notiLimit);
-                }
-            }
-        }catch(e){
-            console.log(e)
-        }
-        try {
-            document.getElementById("postNotiBtn").addEventListener('click', e => postNoti(e));
-        } catch (e) {
 
-        }
-        
-    }
-    else if (page =="createacc")
-    {
-        document.getElementById("createBtn").addEventListener('click', e => createAccount(e))
-    }
-    else
-    {  //user profile
-        var pageNum = 1
-        const limit = 10
-        getPosts("/posts/list/userid/"+page+"/page/" + pageNum + "/limit/" + limit, "../.");
-        window.onscroll = () => {
-            if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
-                pageNum = pageNum + 1;
-                getPosts("/posts/list/userid/" + page + "/page/" + pageNum + "/limit/" + limit, "../.");
-            }
-        }
-    }
-})

@@ -120,3 +120,72 @@ input[type="file"] {
 .notiCard{
     width: 100%;
 }
+.list .list-item {
+    *margin-top: 15px;
+    float: left;
+    padding: 30px;
+    padding-left: 0;
+}
+.list .list-item:first-child{
+    margin-top: 20px;
+}
+.list .list-item:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.list .block {
+    float: left;
+    width: 92%;
+    margin-left: 5%;
+}
+.title {
+    color: #0061AD !important;
+	font-size: 16px;
+}
+.list .block p {
+    margin: 0;
+    padding: 0 0px 5px 0;
+}
+p .title .desc{
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+.desc {
+    text-align: justify !important;
+    font-size: 14px !important;
+    color: black !important;
+}
+.link-detail {
+    color: #0d93f8 !important;
+    font-size: 14px !important;
+}
+a {
+    color: #428bca;
+    text-decoration: none;
+}
+.khoa-phong {
+    float: right;
+    color: #777777;
+    font-size: 14px !important;
+}
+#searchNotiBtn {
+    margin-top: 31px;
+}
+.btn-page {
+    color: black;
+    float: left;
+    padding:  12px 18px;
+    text-decoration: none;
+}
+.btn-page.active {
+    background-color: dodgerblue;
+    color: white;
+    border-radius: 50%;
+}
+.btn-page:hover:not(.active) {
+    background-color: #ddd;
+    border-radius: 50%;
+}

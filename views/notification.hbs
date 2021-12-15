@@ -1,0 +1,111 @@
+<div class="container-fluid h-100 gedf-wrapper">
+    <div class="row h-100">
+        <div class="col-md-2" id="LSidebar">
+            <div class="row sidebar-header">
+                <a href="/users/userid/{{user.id}}">
+                    <div class="col-md-12">
+                        <p id="username" class="text-center font-weight-light">{{user.name}}</p>
+                        <img id="avt" src={{user.avatar}} class="avatar border border-dark rounded-circle" width="80"
+                            height="80" />
+                    </div>
+                </a>
+            </div>
+            <div class="row sidebar-body bg-dark">
+                <div class="col-md-12">
+                    <ul class="list-goup list-unstyled">
+                        <li><a href="/" class="bg-dark list-group-item text-light">News feed</a></li>
+                        <li><a href="#" class="bg-dark list-group-item text-light">Management</a></li>
+                        <li><a href="/notifications" class="bg-dark list-group-item text-light">Notification</a></li>
+                        <li><a href="/users/signout" class="bg-dark list-group-item text-light">Sign out</a></li>
+                        <li><a id="userid" class="bg-dark list-group-item text-light d-none">{{user._id}}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 gedf-main pageCenter">
+            <div id="option">
+                <form>
+                    <div class="form-group row">
+                        <div class="col-sm-2">
+                            <label for="titlesearch">Title:</label>
+                            <input type="text" class="form-control" id="titlesearch" placeholder="">
+                        </div>
+                        <div class="col-sm-2">
+                            <label for="contentsearch">Content:</label>
+                            <input type="text" class="form-control" id="contentsearch" placeholder="">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="category">Select faculty/department</label>
+                            <select class="form-control" id="category">
+                                <option value=""></option>
+                                <option value="1">Phòng Công tác học sinh sinh viên (CTHSSV)</option>
+                                <option value="2">Phòng Đại học</option>
+                                <option value="3">Phòng Sau đại học</option>
+                                <option value="4">Phòng điện toán và máy tính</option>
+                                <option value="5">Phòng khảo thí và kiểm định chất lượng</option>
+                                <option value="6">Phòng tài chính</option>
+                                <option value="7">TDT Creative Language Center</option>
+                                <option value="8">Trung tâm tin học</option>
+                                <option value="9">Trung tâm đào tạo phát triển xã hội (SDTC)</option>
+                                <option value="10">Trung tâm phát triển Khoa học quản lý và Ứng dụng công nghệ (ATEM)</option>
+                                <option value="11">Trung tâm hợp tác doanh nghiệp và cựu sinh viên</option>
+                                <option value="12">Khoa Luật</option>
+                                <option value="13">Trung tâm ngoại ngữ - tin học – bồi dưỡng văn hóa</option>
+                                <option value="14">Viện chính sách kinh tế và kinh doanh</option>
+                                <option value="15">Khoa Mỹ thuật công nghiệp</option>
+                                <option value="16">Khoa Điện – Điện tử</option>
+                                <option value="17">Khoa Công nghệ thông tin</option>
+                                <option value="18">Khoa Quản trị kinh doanh</option>
+                                <option value="19">Khoa Môi trường và bảo hộ lao động</option>
+                                <option value="20">Khoa Lao động công đoàn</option>
+                                <option value="21">Khoa Tài chính ngân hàng</option>
+                                <option value="22">Khoa giáo dục quốc tế</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2" id="searchNotiBtn">
+                            <button type="button" class="btn btn-dark" id="searchNoti">Search</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="pagination justify-content-center">
+                    <button class="btn btn-page">«</button>
+                    <div class="page">
+                        
+                    </div>
+                    <button class="btn btn-page">»</button>
+                </div>
+            </div>
+            <div>
+                <div id="notificationlist">
+                
+                </div>
+            </div>
+        </div>
+        
+        <template>
+            <div class="list box text-shadow">
+                <div class="list-item box" style="width:100% !important;">
+                    <div class="block">
+                        <p class="title" title="TOPIC: Confidence - KEY OF SUCCESS">
+                            <span class="notiTitle">TOPIC: CONFIDENCE - KEY OF SUCCESS</span>
+                        </p>
+                        <p class="desc">
+                            Event time: 8:30AM - 11:15AM, Tuesday, December 21,2021, using Zoom application - Topics are
+                            presented
+                            in Vietnamese, not English. Students can see the details in the annoucement of Vietnamese version.
+                        </p>
+                        <a href="" class="link-detail" style="cursor:pointer!important;">Notification details</a>
+                        <span class="khoa-phong">
+                            <i class="categoryName">Department Of Undergraduate Studies</i>
+                            | Date Created &nbsp; <span class="created-at">14/12/2021</span>
+                        </span>
+        
+                    </div>
+                </div>
+            </div>
+        </template>
+    </div>
+</div>
+<template>
+    <button class="btn btn-page">1</button>
+</template>

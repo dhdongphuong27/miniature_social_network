@@ -46,6 +46,30 @@ class NotificationsController {
         let notifications = await Notification.find().skip(skip).limit(limit).sort([['created_at', -1]]);
         res.json(notifications);
     }
+    async slist(req, res) {
+        let page = parseInt(req.params.page);
+        let limit = parseInt(req.params.limit);
+        let skip = (page - 1) * limit;
+
+        let query = {};
+        if (!(req.params.facultyid === "-")){
+            query.categoryId = req.params.facultyid
+        }
+        if (!(req.params.title === "-")){
+            query.title = { "$regex": req.params.title, "$options": "i" }
+        }
+        if (!(req.params.content === "-")){
+            query.content = { "$regex": req.params.content, "$options": "i" }
+        }
+
+        
+        let notifications = await Notification.find(query).skip(skip).limit(limit).sort([['created_at', -1]]);
+        res.json(notifications);
+    }
+    async numpage(req, res){
+        const num = await Notification.countDocuments();
+        res.json(num);
+    }
 }
 
 module.exports = new NotificationsController()

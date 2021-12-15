@@ -55,11 +55,7 @@ router.get('/createacc', isLoggedIn, isAdminMiddleware, function(req, res, next)
   res.render('createacc', { user: getUserfromSession(req) });
 })
 
-router.get('/postnoti', function(req, res, next) {
-  res.render('postnoti', { user: getUserfromSession(req) })
-})
 
-/* GET home page. */
 router.get('/', isLoggedIn, function(req, res, next) {
   if (isAdmin(req)){
     res.render('admin', { user: getUserfromSession(req) })

@@ -40,7 +40,7 @@ class PostsController {
                 updated_at: new Date(),
                 content: fields.content[0],
                 imageSrc: path,
-                videoSrc: fields.videoSrc[0]
+                videoSrc: fields.videoSrc[0].trim()
             }).save(function (err, p) {
                 if (err) {
                     console.log(err);
