@@ -54,7 +54,7 @@ class UsersController {
         form.parse(req, (err, fields, files) => {
             if (files.avatar) {
                 files.avatar.forEach(file => {
-                    const uploadImageDir = './public/uploads';
+                    const uploadImageDir = './uploads';
                     if (!fs.existsSync(uploadImageDir)) {
                         fs.mkdirSync(uploadImageDir)
                     }
