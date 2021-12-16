@@ -118,7 +118,12 @@ function saveInfo(e, role){
             console.log(response.status)
             return;
         }else{
-            console.log("Edit successfully")
+            var inputFile = document.querySelector("#avatarInput");
+            document.querySelector("#username").innerHTML = document.querySelector("#nameInput").value
+            if (inputFile.files[0]) {
+                document.querySelector("#avt").src = URL.createObjectURL(inputFile.files[0]);
+                inputFile.value = "";
+            }
         }
     })
     
@@ -338,7 +343,7 @@ function postComment(e) {
 
                     clone.querySelector(".avatar").src = document.getElementById("avt").src;
                     clone.querySelector(".display-name").innerHTML = document.getElementById('username').innerHTML.trim();
-                    clone.querySelector(".profilelink").href = "/users/userid/" + "";
+                    clone.querySelector(".profilelink").href = "/users/userid/" + document.querySelector("#userid").innerHTML;
                     clone.querySelector(".commentcontent").innerHTML = commentContentSection.value;
                     clone.querySelector(".deleteCmtBtn").addEventListener('click', e => deleteComment(e))
                     clone.querySelector(".deleteCmtBtn").name = data.commentid;

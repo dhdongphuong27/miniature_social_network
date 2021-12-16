@@ -1,4 +1,6 @@
 const User = require('../models/User');
+const Comment = require('../models/Comment');
+const Post = require('../models/Post');
 var multiparty = require('multiparty');
 var fs = require('fs');
 var mv = require('mv');
@@ -54,7 +56,7 @@ class UsersController {
         form.parse(req, (err, fields, files) => {
             if (files.avatar) {
                 files.avatar.forEach(file => {
-                    const uploadImageDir = './uploads';
+                    const uploadImageDir = './public/uploads';
                     if (!fs.existsSync(uploadImageDir)) {
                         fs.mkdirSync(uploadImageDir)
                     }
@@ -69,6 +71,7 @@ class UsersController {
                 path = getUserfromSession(req).avatar
             }
             var ObjectID = require('mongodb').ObjectID;
+            path = path.replace("./public", "")
             User.updateOne(
                 { "_id": ObjectID(getUserfromSession(req)._id) },
                 {
@@ -82,6 +85,16 @@ class UsersController {
                     }
                 }
             ).then((obj) => {
+                User.findById(ObjectID(getUserfromSession(req)._id), function (err, user) {
+                    
+                    req.session.user = JSON.stringify(user);
+                    req.session.save();
+                    Post.updateMany({ "ownerId": ObjectID(user._id) },
+                        { "$set": { "ownerName": user.name, "ownerAvatar": user.avatar } 
+                    })
+                    Comment.updateMany({ "ownerId": ObjectID(user._id) },
+                        { "$set": { "ownerName": user.name, "ownerAvatar": user.avatar } })
+                })
                 res.json({ success: 'true' });
             }).catch((err) => {
                 res.json({ success: 'false' });

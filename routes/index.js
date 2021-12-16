@@ -48,7 +48,7 @@ router.post('/login', function(req, res, next){
 })
 
 router.get('/login', function(req, res, next) {
-  res.render('login', { user: getUserfromSession(req) });
+  res.render('login');
 });
 
 router.get('/createacc', isLoggedIn, isAdminMiddleware, function(req, res, next) {

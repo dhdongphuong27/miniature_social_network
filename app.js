@@ -29,9 +29,8 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, { /* options */ });
 
 io.on("connection", (socket) => {
-  console.log("Someone connected")
   socket.on("disconnect", function(){
-    console.log(socket.id + " has disconnected")
+    
   })
   socket.on('post notification', (msg) => {
     console.log('message: ' + msg);
@@ -49,9 +48,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(credentials.cookieSecret));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-  resave: false,
+  resave: true,
   saveUninitialized: true,
-  secret: credentials.cookieSecret
+  secret: credentials.cookieSecret,
+  cookie: { secure: false }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
