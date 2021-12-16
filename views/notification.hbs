@@ -18,6 +18,7 @@
                         <li><a href="/notifications" class="bg-dark list-group-item text-light">Notification</a></li>
                         <li><a href="/users/signout" class="bg-dark list-group-item text-light">Sign out</a></li>
                         <li><a id="userid" class="bg-dark list-group-item text-light d-none">{{user._id}}</a></li>
+                        <li><a id="userrole" class="bg-dark list-group-item text-light d-none">{{user.role}}</a></li>
                     </ul>
                 </div>
             </div>
@@ -82,7 +83,7 @@
             </div>
         </div>
         
-        <template>
+        <template id="notificationTemplate">
             <div class="list box text-shadow">
                 <div class="list-item box" style="width:100% !important;">
                     <div class="block">
@@ -94,7 +95,7 @@
                             presented
                             in Vietnamese, not English. Students can see the details in the annoucement of Vietnamese version.
                         </p>
-                        <a href="" class="link-detail" style="cursor:pointer!important;">Notification details</a>
+                        <a href="#" class="notiDetail" style="cursor:pointer!important;">Notification details</a>
                         <span class="khoa-phong">
                             <i class="categoryName">Department Of Undergraduate Studies</i>
                             | Date Created &nbsp; <span class="created-at">14/12/2021</span>
@@ -106,6 +107,6 @@
         </template>
     </div>
 </div>
-<template>
+<template id="pagingTemplate">
     <button class="btn btn-page">1</button>
 </template>

@@ -21,18 +21,22 @@ var notificationsRouter = require('./routes/notifications');
 
 const { createServer } = require("http");
 const { Server } = require("socket.io");
-const port = 3000
 
 
 
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, { /* options */ });
+
 io.on("connection", (socket) => {
   console.log("Someone connected")
   socket.on("disconnect", function(){
     console.log(socket.id + " has disconnected")
   })
+  socket.on('post notification', (msg) => {
+    console.log('message: ' + msg);
+    io.emit('post notification', msg);
+  });
 });
 
 // view engine setup

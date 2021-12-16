@@ -14,9 +14,11 @@
                 <div class="col-md-12">
                     <ul class="list-goup list-unstyled">
                         <li><a href="/" class="bg-secondary list-group-item text-light">Main page</a></li>
-                        <li><a href="/management" class="bg-dark list-group-item text-light">Management</a></li>
+                        <li><a href="/notifications" class="bg-dark list-group-item text-light">Notification</a></li>
+                        <li><a href="/settings" class="bg-dark list-group-item text-light">Settings</a></li>
                         <li><a href="/users/signout" class="bg-dark list-group-item text-light">Sign out</a></li>
                         <li><a id="userid" class="bg-dark list-group-item text-light d-none">{{user._id}}</a></li>
+                        <li><a id="userrole" class="bg-dark list-group-item text-light d-none">{{user.role}}</a></li>
                     </ul>
                 </div>
             </div>
@@ -55,7 +57,7 @@
                 </div>
             </form>
             <div id="newsfeed">
-                <template>
+                <template id="postTemplate">
                     <div class="card gedf-card">
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center">
@@ -116,7 +118,7 @@
                             <div class="pb-2">
             
                                 <button type="button" class="btn btn-outline-primary custombtn showCommentsBtn" name="aslkdnas"><i
-                                        class="fa fa-comment"></i> Load comments</button>
+                                        class="fa fa-comment"></i> Show comments</button>
                                 <button type="button" class="btn btn-outline-primary custombtn hideCommentsBtn" name="aslkdnas"><i
                                         class="fa fa-comment"></i> Hide comments</button>
                             </div>
@@ -124,12 +126,12 @@
             
                             </div>
                             <textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' name="comment"
-                                class="form-control commentContent" rows="2" placeholder="" required></textarea>
+                                class="form-control commentContentInput" rows="2" placeholder="" required></textarea>
                             <button class="btn btn-dark commentBtn">Comment</button>
                         </div>
                     </div>
                 </template>
-                <template>
+                <template id="cmtTemplate">
                     <div class="card-header">
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex justify-content-between align-items-center">

@@ -85,7 +85,7 @@ img.avatar {
     }
 }
 
-input[type="file"] {
+#file-upload{
     display: none;
 }
 .postImg{
@@ -114,8 +114,11 @@ input[type="file"] {
     border: none;
     background: none;
 }
-.hideCommentsBtn{
-    display: none;
+.notiHeader {
+    margin-top: 5%;
+}
+#allNoti{
+    float: right;
 }
 .notiCard{
     width: 100%;
@@ -162,10 +165,6 @@ p .title .desc{
     color: #0d93f8 !important;
     font-size: 14px !important;
 }
-a {
-    color: #428bca;
-    text-decoration: none;
-}
 .khoa-phong {
     float: right;
     color: #777777;
@@ -188,4 +187,43 @@ a {
 .btn-page:hover:not(.active) {
     background-color: #ddd;
     border-radius: 50%;
+}
+@media screen and (max-width: 700px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .sidebar a {float: left;}
+  div.content {margin-left: 0;}
+}
+.rnews-header {
+    margin-top: 20px;
+    top: 0px !important;
+    font-size: 2.0em !important;
+    font-weight: bold !important;
+    padding-bottom: 1em !important;
+    color: #0061AD !important;
+    line-height: 1.2em !important;
+    text-align: center !important;
+}
+.rnews-article-content {
+    padding-left: 1em !important;
+    float: left !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    font-family: Tahoma !important;
+    font-size: 20px !important;
+    text-align: justify !important;
+}
+.rnews-article-summary {
+    color: #0061AD !important;
+    float: right !important;
+}
+#categoryName{
+    color:#0061AD !important;
+}
+.popupnoti{
+    width:100%;
+    margin-top: 1%;
 }

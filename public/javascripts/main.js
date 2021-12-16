@@ -1,6 +1,15 @@
 $(document).ready(function () {
     var path = window.location.pathname;
     var page = path.split("/").pop();
+    var socket = io();
+
+    if (document.querySelector("#userrole").innerHTML =="student"){
+        socket.on('post notification', function (msg) {
+            console.log(msg)
+            onNotificationReceived(msg);
+        });
+    }
+    
     if (page=="")
     {
         var pageNum = 1
@@ -12,7 +21,7 @@ $(document).ready(function () {
                 getPosts("/posts/list/page/" + pageNum + "/limit/" + limit, "");
             }
         }
-        try{ //only student can run this code
+        try{ //only student run this code
             document.getElementById("postBtn").addEventListener('click', e => postBtn(e));
             document.getElementById('toggleVideoBtn').onclick = function (e) {
                 var videoinput = document.getElementById("videoinput");
@@ -33,10 +42,10 @@ $(document).ready(function () {
                 }
             }
         }catch(e){
-            console.log(e)
+            
         }
         try {
-            document.getElementById("postNotiBtn").addEventListener('click', e => postNoti(e));
+            document.getElementById("postNotiBtn").addEventListener('click', e => postNoti(e, socket));
         } catch (e) {
 
         }
@@ -56,31 +65,99 @@ $(document).ready(function () {
     {
         document.getElementById("createBtn").addEventListener('click', e => createAccount(e))
     }
+    else if (page =="settings")
+    {
+        if (document.getElementById("userrole").innerHTML!=="student"){
+            document.getElementById("studentOnly").remove();
+            document.querySelector("#saveInfo").addEventListener('click', e => saveInfo(e, "faculty"))
+        }else{
+            document.querySelector("#saveInfo").addEventListener('click', e => saveInfo(e, "student"))
+        }
+    }
     else
-    {  //user profile
-        var pageNum = 1
-        const limit = 10
-        getPosts("/posts/list/userid/"+page+"/page/" + pageNum + "/limit/" + limit, "../.");
-        window.onscroll = () => {
-            if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
-                pageNum = pageNum + 1;
-                getPosts("/posts/list/userid/" + page + "/page/" + pageNum + "/limit/" + limit, "../.");
+    {  
+        try { //user profile
+            var pageNum = 1
+            const limit = 10
+            getPosts("/posts/list/userid/" + page + "/page/" + pageNum + "/limit/" + limit, "../.");
+            window.onscroll = () => {
+                if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+                    pageNum = pageNum + 1;
+                    getPosts("/posts/list/userid/" + page + "/page/" + pageNum + "/limit/" + limit, "../.");
+                }
             }
+        }catch(e){
+        
+        }
+        try{ //notification details
+            getNotiDetails(page)
+        }catch{
+
         }
     }
 })
+function saveInfo(e, role){
+    e.preventDefault();
+    const formData = new FormData();
+    if (role==="student"){
+        const inputFile = document.querySelector("#avatarInput");
+        formData.append("name", document.querySelector("#nameInput").value)
+        formData.append("class", document.querySelector("#classInput").value)
+        formData.append("faculty", document.querySelector("#facultyInput").value)
+        formData.append("phone", document.querySelector("#phoneInput").value)
+        formData.append("password", document.querySelector("#passwordInput").value)
+        formData.append("avatar", inputFile.files[0]);
+    }else if (role==="faculty"){
+        formData.append("password", document.querySelector("#passwordInput").value)
+    }
+    fetch('/users/settings', {
+        method: 'PUT',
+        body: formData
+    }).then(response => {
+        if (response.status !== 200) {
+            console.log(response.status)
+            return;
+        }else{
+            console.log("Edit successfully")
+        }
+    })
+    
+    
+}
+function onNotificationReceived(msg){
+    var clone = document.querySelector("#popupTemplate").content.cloneNode(true);
+    clone.querySelector(".popupnoti").href = "/notifications/details/" + msg._id;
+    clone.querySelector(".popuptitle").innerHTML = msg.title;
+    clone.querySelector(".popupcategoryName").innerHTML = msg.categoryName;
+
+    document.querySelector(".popupnoticontainer").append(clone);
+}
+function getNotiDetails(page){
+    fetch("/notifications/notificationid/"+page).then(response =>{
+        if (response.status !== 200) {
+            console.log('Looks like there was a problem. Status Code:' + response.status)
+            return;
+        }
+        response.json().then(data => {
+            
+            document.querySelector("#categoryName").innerHTML = data.categoryName;
+            document.querySelector("#rnews-header").innerHTML = data.title;
+            document.querySelector("#rnew_content").innerHTML = data.content;
+        })
+    })
+}   
 function getNumberofPages(){
     fetch("/notifications/numpage").then(response =>{
         if (response.status !== 200) {
             console.log('Looks like there was a problem. Status Code:' + response.status)
             return;
         }
+
         response.json().then(data => {
             var num = parseInt(data)
             var page = Math.ceil(num / 10)
-            console.log(page)
             for (var i = 1; i <= page; i++){
-                var clone = document.getElementsByTagName("template")[1].content.cloneNode(true);
+                var clone = document.querySelector("#pagingTemplate").content.cloneNode(true);
                 clone.querySelector(".btn").innerHTML = i;
                 clone.querySelector(".btn").addEventListener('click', e => loadPage(e))
                 document.querySelector(".page").append(clone)
@@ -114,12 +191,12 @@ function getSpecificNotifications(facultyid, title, content, notiPageNum, notiLi
 
             removeAllChildNodes(document.querySelector("#notificationlist"))
             for (let i = 0; i < data.length; i++) {
-                var clone = document.getElementsByTagName("template")[0].content.cloneNode(true);
+                var clone = document.querySelector("#notificationTemplate").content.cloneNode(true);
                 clone.querySelector(".notiTitle").innerHTML = data[i].title;
                 clone.querySelector(".desc").innerHTML = data[i].content;
                 clone.querySelector(".created-at").innerHTML = moment(data[i].created_at).format('MMMM Do YYYY');
                 clone.querySelector(".categoryName").innerHTML = data[i].categoryName;
-
+                clone.querySelector(".notiDetail").href = "/notifications/details/"+data[i]._id;
                 document.querySelector("#notificationlist").append(clone)
             }
         })
@@ -237,7 +314,7 @@ function editPost(e){
 function postComment(e) {
     e.preventDefault();
     const btn = e.currentTarget;
-    const commentContentSection = e.currentTarget.parentNode.querySelector(".commentContent");
+    const commentContentSection = e.currentTarget.parentNode.querySelector(".commentContentInput");
     if (commentContentSection.value!==""){
         let data = {
             postid: commentContentSection.name,
@@ -257,8 +334,8 @@ function postComment(e) {
             // Examine the text in the response
             response.json().then(function (data) {
                 if (data.success == 'true') {
-                    var temp = document.getElementsByTagName("template");
-                    var clone = temp[1].content.cloneNode(true);
+                    var clone = document.querySelector("#cmtTemplate").content.cloneNode(true);
+
                     clone.querySelector(".avatar").src = document.getElementById("avt").src;
                     clone.querySelector(".display-name").innerHTML = document.getElementById('username').innerHTML.trim();
                     clone.querySelector(".profilelink").href = "/users/userid/" + "";
@@ -271,7 +348,6 @@ function postComment(e) {
                     alert(data.err)
                 }
             });
-
         })
     }
 }
@@ -290,8 +366,8 @@ function showComments(e) {
         response.json().then(data => {
             removeAllChildNodes(btn.parentNode.parentNode.querySelector('.comment-container'));
             for (let i = 0; i < data.length; i++) {
-                var temp = document.getElementsByTagName("template");
-                var clone = temp[1].content.cloneNode(true);
+                var clone = document.querySelector("#cmtTemplate").content.cloneNode(true);
+                
                 clone.querySelector(".avatar").src = data[i].ownerAvatar;
                 clone.querySelector(".display-name").innerHTML = data[i].ownerName;
                 clone.querySelector(".profilelink").href = "/users/userid/" + data[i].ownerId;
@@ -320,8 +396,7 @@ function getPosts(route,prepend) {
         }
         response.json().then(data => {
             for (let i = 0; i < data.length; i++) {
-                var temp = document.getElementsByTagName("template");
-                var clone = temp[0].content.cloneNode(true);
+                var clone = document.querySelector("#postTemplate").content.cloneNode(true);
                 var nameEl = clone.querySelector(".display-name");
                 nameEl.innerHTML = data[i].ownerName;
                 var profileLinkEl = clone.querySelector(".profilelink")
@@ -331,7 +406,7 @@ function getPosts(route,prepend) {
                 var editEl = clone.querySelector(".editcontent");
                 editEl.value = data[i].content;
                 editEl.name = data[i]._id;
-                var commentEl = clone.querySelector(".commentContent");
+                var commentEl = clone.querySelector(".commentContentInput");
                 commentEl.name = data[i]._id;
                 var editPostForm = clone.querySelector(".editPostForm")
                 editPostForm.style.display = "none";
@@ -391,7 +466,6 @@ function getPosts(route,prepend) {
                 button.addEventListener('click', e => deletePost(e))
             })
             $(".commentBtn").unbind().click(function (e) {
-                console.log("post comment")
                 postComment(e)
             });
             $(".showCommentsBtn").unbind().click(function (e) {
@@ -418,8 +492,7 @@ function getNotifications(notiPageNum, notiLimit){
     })
 }
 function addOneNotification(noti){
-    var temp = document.getElementsByTagName("template");
-    var clone = temp[2].content.cloneNode(true);
+    var clone = document.querySelector("#notiTemplate").content.cloneNode(true);
     clone.querySelector(".falcutyname").innerHTML = noti.ownerName;
     clone.querySelector(".contentsummary").innerHTML = noti.content.slice(0, 70);
     clone.querySelector(".created-at").innerHTML = moment(noti.created_at).format("Do MMM YYYY");
@@ -451,8 +524,7 @@ function postBtn(e){
         // Examine the text in the response
         response.json().then(function (data) {
             if (data.success == 'true') {
-                var temp = document.getElementsByTagName("template");
-                var clone = temp[0].content.cloneNode(true);
+                var clone = document.querySelector("#postTemplate").content.cloneNode(true);
                 var nameEl = clone.querySelector(".display-name");
                 nameEl.innerHTML = document.getElementById('username').innerHTML.trim();
                 var statusEl = clone.querySelector(".statuscontent");
@@ -464,6 +536,8 @@ function postBtn(e){
                 var profileLinkEl = clone.querySelector(".profilelink")
                 profileLinkEl.href = "/users/userid/" + document.getElementById('userid').innerHTML.trim();
                 editPostForm.style.display = "none";
+                var commentEl = clone.querySelector(".commentContentInput");
+                commentEl.name = data.postid;
                 clone.querySelector(".editPostBtn").addEventListener('click', e => toggleFormEdit(e))
                 clone.querySelector(".savePostBtn").addEventListener('click', e => editPost(e))
                 clone.querySelector(".deletePostBtn").addEventListener('click', e => deletePost(e))
@@ -555,7 +629,7 @@ function createAccount(e){
     })
     
 }
-function postNoti(e){
+function postNoti(e, socket){
     const btn = e.currentTarget;
     var notiTextArea = btn.parentNode.parentNode.parentNode.querySelector("#noticontent")
     const category = document.querySelector("#category")
@@ -579,7 +653,7 @@ function postNoti(e){
         response.json().then(function (data) {
             if (data.success == 'true') {
                 document.querySelector(".postNotiForm").reset()
-                //send message to socket.io server 
+                socket.emit('post notification', data.noti);
             } else {
                 alert(data.err)
             }

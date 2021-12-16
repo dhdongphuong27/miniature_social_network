@@ -33,5 +33,5 @@ router.get('/details/:notificationid', function (req, res) {
 router.get('/list/page/:page/limit/:limit', notificationsController.list); 
 router.get('/slist/facultyid/:facultyid/title/:title/content/:content/page/:page/limit/:limit', notificationsController.slist); 
 router.get('/numpage', notificationsController.numpage);
-
+router.get('/notificationid/:notificationid', notificationsController.getOne);
 module.exports = router;

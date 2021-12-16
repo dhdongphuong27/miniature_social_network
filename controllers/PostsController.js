@@ -1,4 +1,5 @@
 const Post = require('../models/Post');
+const Comment = require('../models/Comment');
 var multiparty = require('multiparty');
 var fs = require('fs');
 var mv = require('mv');
@@ -93,6 +94,12 @@ class PostsController {
                 Post.deleteOne(
                     { _id: ObjectID(req.body.postid) },
                 ).then((obj) => {
+                    console.log(req.body.postid)
+                    Comment.deleteMany(
+                        { postid: req.body.postid },
+                    ).catch((err) => {
+                        
+                    })
                     res.json({ success: 'true' });
                 }).catch((err) => {
                     res.json({ success: 'false' });

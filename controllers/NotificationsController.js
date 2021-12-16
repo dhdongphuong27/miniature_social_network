@@ -27,12 +27,11 @@ class NotificationsController {
                 categoryId: req.body.categoryId,
                 title: req.body.title,
                 content: req.body.content
-            }).save(function (err) {
+            }).save(function (err, noti) {
                 if (err) {
-                    console.log(err);
                     res.json({ success: 'false' });
                 } else {
-                    res.json({ success: 'true'  });
+                    res.json({ success: 'true' , noti: noti});
                 }
             })
         } else{
@@ -69,6 +68,11 @@ class NotificationsController {
     async numpage(req, res){
         const num = await Notification.countDocuments();
         res.json(num);
+    }
+    async getOne(req, res){
+        Notification.findById(req.params.notificationid, function (err, noti) {
+            res.json(noti);
+        });
     }
 }
 

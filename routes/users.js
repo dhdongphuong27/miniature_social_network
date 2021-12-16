@@ -30,6 +30,9 @@ router.post('/createfacultyacc', function(req, res, next) {
     res.json({ success: 'false' });
   }
 })
+router.put('/settings', function(req, res, next) {
+  usersController.settings(req, res)
+})
 
 router.get('/signout', function(req, res, next) {
   req.session.destroy();
