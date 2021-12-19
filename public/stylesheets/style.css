@@ -72,6 +72,12 @@ a.list-group-item {
 img.avatar {
   margin-left: 30%
 }
+img:before {
+    content: ' ';
+    display: block;
+    position: absolute;
+    background-image: url();
+}
 .gedf-wrapper {
     margin-top: 0.5rem;
 }
@@ -122,6 +128,7 @@ img.avatar {
 }
 .notiCard{
     width: 100%;
+    display: none;
 }
 .list .list-item {
     *margin-top: 15px;
@@ -224,6 +231,76 @@ p .title .desc{
     color:#0061AD !important;
 }
 .popupnoti{
-    width:100%;
     margin-top: 1%;
+    white-space: normal !important;
+    width: 100%;
+    text-align: left !important;
+}
+#postNotiSuccess{
+    width:100%;
+}
+.postNotiContainer{
+    display: none;
+}
+.popupnoticontainer{
+    z-index: 100;
+    width: 100%;
+}
+.custombtn{
+    font-size: 14px;
+    padding: 6px 12px;
+    margin-bottom: 0;
+
+    display: inline-block;
+    text-decoration: none;
+    
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+}
+.newnoti {
+
+    height: 1em;
+    -webkit-animation: flickerAnimation 1s infinite;
+    -moz-animation: flickerAnimation 1s infinite;
+    -o-animation: flickerAnimation 1s infinite;
+    animation: flickerAnimation 1s infinite;
+    float: left !important;
+    vertical-align: middle;
+    border: 0;
+    display: none;
+}
+@keyframes flickerAnimation {
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-o-keyframes flickerAnimation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-moz-keyframes flickerAnimation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-webkit-keyframes flickerAnimation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+.animate-flicker {
+   -webkit-animation: flickerAnimation 1s infinite;
+   -moz-animation: flickerAnimation 1s infinite;
+   -o-animation: flickerAnimation 1s infinite;
+    animation: flickerAnimation 1s infinite;
 }

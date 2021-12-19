@@ -5,8 +5,8 @@ $(document).ready(function () {
 
     if (document.querySelector("#userrole").innerHTML =="student"){
         socket.on('post notification', function (msg) {
-            console.log(msg)
             onNotificationReceived(msg);
+            addOneNotification(msg, "new");
         });
     }
     
@@ -44,8 +44,11 @@ $(document).ready(function () {
         }catch(e){
             
         }
-        try {
+        try {// faculty
             document.getElementById("postNotiBtn").addEventListener('click', e => postNoti(e, socket));
+            document.getElementById("postNotiSuccess").onclick = function (e) {
+                e.currentTarget.style.display = "none";
+            }
         } catch (e) {
 
         }
@@ -64,6 +67,9 @@ $(document).ready(function () {
     else if (page =="createacc")
     {
         document.getElementById("createBtn").addEventListener('click', e => createAccount(e))
+        document.getElementById("postNotiSuccess").onclick = function (e) {
+            e.currentTarget.style.display = "none";
+        }
     }
     else if (page =="settings")
     {
@@ -76,7 +82,7 @@ $(document).ready(function () {
     }
     else
     {  
-        try { //user profile
+        if (path.includes("users/userid")) {
             var pageNum = 1
             const limit = 10
             getPosts("/posts/list/userid/" + page + "/page/" + pageNum + "/limit/" + limit, "../.");
@@ -86,16 +92,34 @@ $(document).ready(function () {
                     getPosts("/posts/list/userid/" + page + "/page/" + pageNum + "/limit/" + limit, "../.");
                 }
             }
-        }catch(e){
-        
+            getUserinfo(page);
         }
-        try{ //notification details
+        if (path.includes("notifications/details")){
             getNotiDetails(page)
-        }catch{
-
         }
     }
+    // If image not found
+    $("img").each(function (i, ele) {
+        $("<img/>").attr("src", $(ele).attr("src")).on('error', function () {
+            $(ele).attr("src", "/images/imagenotfound.png");
+        })
+    });
+
+    $("img").on("error", function () {
+        $(this).attr("src", "/images/imagenotfound.png");
+    });
 })
+function getUserinfo(page){
+    fetch("/users/info/userid/" + page).then(response => {
+        if (response.status !== 200) {
+            console.log('Looks like there was a problem. Status Code:' + response.status)
+            return;
+        }
+        response.json().then(data => {
+            console.log(data)
+        })
+    })
+}
 function saveInfo(e, role){
     e.preventDefault();
     const formData = new FormData();
@@ -132,10 +156,9 @@ function saveInfo(e, role){
 function onNotificationReceived(msg){
     var clone = document.querySelector("#popupTemplate").content.cloneNode(true);
     clone.querySelector(".popupnoti").href = "/notifications/details/" + msg._id;
-    clone.querySelector(".popuptitle").innerHTML = msg.title;
     clone.querySelector(".popupcategoryName").innerHTML = msg.categoryName;
-
-    document.querySelector(".popupnoticontainer").append(clone);
+    document.querySelector(".popupnoticontainer").append(clone)
+    $(".popupnoti:last-child").delay(2000).fadeOut(1000);
 }
 function getNotiDetails(page){
     fetch("/notifications/notificationid/"+page).then(response =>{
@@ -144,7 +167,6 @@ function getNotiDetails(page){
             return;
         }
         response.json().then(data => {
-            
             document.querySelector("#categoryName").innerHTML = data.categoryName;
             document.querySelector("#rnews-header").innerHTML = data.title;
             document.querySelector("#rnew_content").innerHTML = data.content;
@@ -157,7 +179,6 @@ function getNumberofPages(){
             console.log('Looks like there was a problem. Status Code:' + response.status)
             return;
         }
-
         response.json().then(data => {
             var num = parseInt(data)
             var page = Math.ceil(num / 10)
@@ -171,6 +192,8 @@ function getNumberofPages(){
     })
 }
 function loadPage(e) {
+    $(".btn-page").removeClass("active");
+    $(e.currentTarget).addClass("active");
     category = document.querySelector("#category").value;
     titlesearch = document.querySelector("#titlesearch").value;
     contentsearch = document.querySelector("#contentsearch").value;
@@ -479,6 +502,9 @@ function getPosts(route,prepend) {
             $(".hideCommentsBtn").unbind().click(function (e) {
                 hideComments(e)
             });
+            $("img").on("error", function () {
+                $(this).attr("src", "/images/imagenotfound.png");
+            });
             removeNotOwned();
         })
     })
@@ -491,19 +517,31 @@ function getNotifications(notiPageNum, notiLimit){
         }
         response.json().then(data => {
             for (let i = 0; i < data.length; i++) {
-                addOneNotification(data[i])
+                addOneNotification(data[i], "old")
             }
         })
     })
 }
-function addOneNotification(noti){
+function addOneNotification(noti, position){
     var clone = document.querySelector("#notiTemplate").content.cloneNode(true);
-    clone.querySelector(".falcutyname").innerHTML = noti.ownerName;
+    clone.querySelector(".falcutyname").innerHTML = noti.categoryName;
     clone.querySelector(".contentsummary").innerHTML = noti.content.slice(0, 70);
     clone.querySelector(".created-at").innerHTML = moment(noti.created_at).format("Do MMM YYYY");
     clone.querySelector(".notiTitle").href = "/notifications/details/" + noti._id;
     clone.querySelector(".notiTitle").innerHTML = noti.title;
-    document.getElementById("notiList").append(clone);
+    
+    if (position==="old"){
+        document.getElementById("notiList").append(clone);
+        $(".notiCard:last-child").css("display", "block");
+    }else if (position==="new"){
+        clone.querySelector(".newnoti").style.display = "block";
+        document.getElementById("notiList").prepend(clone);
+        $(".notiCard:first-child").fadeIn(1000);
+        //$(".notiCard:last-child");
+    }
+}
+function setColor(object, color){
+
 }
 function postBtn(e){
     e.preventDefault();
@@ -626,6 +664,8 @@ function createAccount(e){
         response.json().then(function (data) {
             if (data.success == 'true') {
                 document.querySelector(".createAccForm").reset()
+                document.querySelector(".postNotiContainer").style.display = 'block';
+                $(".postNotiContainer").delay(4000).fadeOut(300);
             } else {
                 alert(data.err)
             }
@@ -658,6 +698,8 @@ function postNoti(e, socket){
         response.json().then(function (data) {
             if (data.success == 'true') {
                 document.querySelector(".postNotiForm").reset()
+                document.querySelector(".postNotiContainer").style.display = 'block';
+                $(".postNotiContainer").delay(4000).fadeOut(300);
                 socket.emit('post notification', data.noti);
             } else {
                 alert(data.err)

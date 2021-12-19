@@ -61,7 +61,6 @@ class NotificationsController {
             query.content = { "$regex": req.params.content, "$options": "i" }
         }
 
-        
         let notifications = await Notification.find(query).skip(skip).limit(limit).sort([['created_at', -1]]);
         res.json(notifications);
     }

@@ -47,7 +47,7 @@ class UsersController {
                 }
             })
         }else{
-            res.json({ success: 'false', message: 'You dont have permission'})
+            res.json({ success: 'false', message: 'You dont have permission to create account'})
         }
     }
     settings(req, res){
@@ -100,6 +100,11 @@ class UsersController {
                 res.json({ success: 'false' });
             })
         })
+    }
+    getUserInfo(req,res){
+        User.findById(req.params.userid, function (err, user) {
+            res.json(user);
+        });
     }
 }
 module.exports = new UsersController()

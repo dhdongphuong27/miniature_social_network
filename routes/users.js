@@ -16,10 +16,10 @@ function isAdmin(req) {
   }
   return false;
 }
-router.get('/userid/:userid/', function(req, res, next) {
+router.get('/userid/:userid', function(req, res, next) {
   res.render('profile', { user: getUserfromSession(req) });
 });
-
+router.get('/info/userid/:userid', usersController.getUserInfo);
 router.post('/createfacultyacc', function(req, res, next) {
   if (isAdmin(req))
   {
