@@ -184,8 +184,12 @@ function getNumberofPages(){
             var page = Math.ceil(num / 10)
             for (var i = 1; i <= page; i++){
                 var clone = document.querySelector("#pagingTemplate").content.cloneNode(true);
-                clone.querySelector(".btn").innerHTML = i;
-                clone.querySelector(".btn").addEventListener('click', e => loadPage(e))
+                var btn = clone.querySelector(".btn")
+                if(i==1){
+                    $(btn).addClass("active");
+                }
+                btn.innerHTML = i;
+                btn.addEventListener('click', e => loadPage(e))
                 document.querySelector(".page").append(clone)
             }
         })
@@ -209,6 +213,7 @@ function getSpecificNotifications(facultyid, title, content, notiPageNum, notiLi
     if (facultyid === "") facultyid = "-";
     if (title === "") title = "-";
     if (content === "") content = "-";
+    removeAllChildNodes(document.querySelector("#notificationlist"))
     fetch("/notifications/slist/facultyid/"+facultyid+"/title/"+title+"/content/"+content+"/page/" + notiPageNum + "/limit/" + notiLimit)
     .then(response => {
         if (response.status !== 200) {
@@ -216,8 +221,6 @@ function getSpecificNotifications(facultyid, title, content, notiPageNum, notiLi
             return;
         }
         response.json().then(data => {
-
-            removeAllChildNodes(document.querySelector("#notificationlist"))
             for (let i = 0; i < data.length; i++) {
                 var clone = document.querySelector("#notificationTemplate").content.cloneNode(true);
                 clone.querySelector(".notiTitle").innerHTML = data[i].title;
