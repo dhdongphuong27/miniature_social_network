@@ -693,8 +693,7 @@ function createAccount(e){
     
 }
 function postNoti(e, socket){
-    const btn = e.currentTarget;
-    var notiTextArea = btn.parentNode.parentNode.parentNode.querySelector("#noticontent")
+    var notiTextArea = document.querySelector("#noticontent")
     const category = document.querySelector("#category")
     let data = {
         categoryName: category.options[category.selectedIndex].text,
