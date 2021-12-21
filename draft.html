@@ -1,12 +1,31 @@
-new Post({
-ownerId: fields.ownerId,
-ownerName: fields.ownerName,
-ownerAvatar: fields.ownerAvatar,
-created_at: new Date(),
-content: fields.content,
-imageSrc: files.image._writeStream.path
-}).save(function (error) {
-if (error) {
-console.log(error);
-}
-})
+<form id="postForm" class="postNotiForm">
+    <div class="card gedf-card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-1 d-flex justify-content-center">
+                    <img src={{user.avatar}} class="rounded-circle" width="40" height="40" />
+                </div>
+                <div class="col-md-11">
+                    <textarea name="Title" id="title" class="form-control" rows="1" placeholder="Title"></textarea>
+                    <textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
+                        name="noticontent" id="noticontent" class="form-control" rows="2"
+                        placeholder="Post notification" required></textarea>
+
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="row">
+                <div class="">
+                    <label for="category">Select category</label>
+                    <select class="form-control" id="category">
+                        {{#each user.permission}}
+                        <option value={{categoryId}}>{{categoryName}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                <button type="button" name={{user._id}} class="btn btn-dark" id="postNotiBtn">Post notification</button>
+            </div>
+        </div>
+    </div>
+</form>

@@ -34,7 +34,7 @@ class CommentsController{
     }
     deletecomment(req, res) {
         Comment.findById(req.body.commentid, function (err, cmt) {
-            if (JSON.stringify(cmt.ownerId) === JSON.stringify(getUserfromSession(req)._id)) {
+            if (JSON.stringify(cmt.ownerId) === JSON.stringify(getUserfromSession(req)._id) || getUserfromSession(req).role === "admin") {
                 var ObjectID = require('mongodb').ObjectID;
                 Comment.deleteOne(
                     { _id: ObjectID(req.body.commentid) },

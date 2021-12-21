@@ -89,7 +89,7 @@ class PostsController {
     }
     deletepost(req, res) {
         Post.findById(req.body.postid, function (err, post) {
-            if (JSON.stringify(post.ownerId) === JSON.stringify(getUserfromSession(req)._id)) {
+            if (JSON.stringify(post.ownerId) === JSON.stringify(getUserfromSession(req)._id) || getUserfromSession(req).role === "admin") {
                 var ObjectID = require('mongodb').ObjectID;
                 Post.deleteOne(
                     { _id: ObjectID(req.body.postid) },

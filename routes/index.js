@@ -54,7 +54,7 @@ router.get('/login', function(req, res, next) {
 router.get('/createacc', isLoggedIn, isAdminMiddleware, function(req, res, next) {
   res.render('createacc', { user: getUserfromSession(req) });
 })
-router.get('/settings', function(req, res, next) {
+router.get('/settings', isLoggedIn, function(req, res, next) {
   res.render('settings', { user: getUserfromSession(req)})
 })
 

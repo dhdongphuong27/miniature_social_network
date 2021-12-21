@@ -26,7 +26,7 @@ router.get('/', isLoggedIn,function (req, res) {
     res.render('notification', { user: getUserfromSession(req) })
 })
 
-router.get('/details/:notificationid', function (req, res) {
+router.get('/details/:notificationid', isLoggedIn, function (req, res) {
     res.render('notidetail', { user: getUserfromSession(req) })
 })
 

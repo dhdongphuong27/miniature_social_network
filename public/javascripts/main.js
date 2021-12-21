@@ -116,7 +116,13 @@ function getUserinfo(page){
             return;
         }
         response.json().then(data => {
-            console.log(data)
+            document.querySelector("#card-inf-mssv").innerHTML = data.email.replace("@student.tdtu.edu.vn", "")
+            document.querySelector("#card-inf-faculty").innerHTML = data.faculty;
+            document.querySelector("#card-inf-class").innerHTML = data.class;
+            document.querySelector("#card-inf-phone").innerHTML = data.phone;
+            document.querySelector("#card-inf-email").innerHTML = data.email;
+            document.querySelector("#card-inf-name").innerHTML = data.name;
+            document.querySelector(".infBody-img").src = data.avatar;
         })
     })
 }
@@ -157,8 +163,8 @@ function onNotificationReceived(msg){
     var clone = document.querySelector("#popupTemplate").content.cloneNode(true);
     clone.querySelector(".popupnoti").href = "/notifications/details/" + msg._id;
     clone.querySelector(".popupcategoryName").innerHTML = msg.categoryName;
-    document.querySelector(".popupnoticontainer").append(clone)
-    $(".popupnoti:last-child").delay(2000).fadeOut(1000);
+    document.querySelector(".popupnoticontainer").prepend(clone)
+    $(".popupnoti:first-child").delay(2000).fadeOut(1000);
 }
 function getNotiDetails(page){
     fetch("/notifications/notificationid/"+page).then(response =>{
@@ -251,7 +257,6 @@ function removeNotOwned(){
 }
 function deletePost(e){
     const postId = e.currentTarget.name;
-    console.log(postId);
     const post = e.currentTarget.parentNode.parentNode.parentNode
         .parentNode.parentNode.parentNode;
     let data = {
@@ -389,6 +394,8 @@ function removeAllChildNodes(parent) {
 }
 function showComments(e) {
     const btn = e.currentTarget;
+    btn.style.display = "none";
+    e.currentTarget.parentNode.querySelector(".hideCommentsBtn").style.display = "block";
     fetch("/comments/list/postid/" + btn.name).then(response => {
         if (response.status !== 200) {
             console.log('Looks like there was a problem. Status Code:' + response.status)
@@ -417,6 +424,8 @@ function showComments(e) {
 }
 function hideComments(e){
     const btn = e.currentTarget;
+    btn.style.display = "none";
+    e.currentTarget.parentNode.querySelector(".showCommentsBtn").style.display = "block";
     removeAllChildNodes(btn.parentNode.parentNode.querySelector('.comment-container'));
 }
 function getPosts(route,prepend) {
@@ -525,7 +534,7 @@ function getNotifications(notiPageNum, notiLimit){
         })
     })
 }
-function addOneNotification(noti, position){
+function addOneNotification(noti, type){
     var clone = document.querySelector("#notiTemplate").content.cloneNode(true);
     clone.querySelector(".falcutyname").innerHTML = noti.categoryName;
     clone.querySelector(".contentsummary").innerHTML = noti.content.slice(0, 70);
@@ -533,14 +542,20 @@ function addOneNotification(noti, position){
     clone.querySelector(".notiTitle").href = "/notifications/details/" + noti._id;
     clone.querySelector(".notiTitle").innerHTML = noti.title;
     
-    if (position==="old"){
+    if (type==="old"){
         document.getElementById("notiList").append(clone);
         $(".notiCard:last-child").css("display", "block");
-    }else if (position==="new"){
-        clone.querySelector(".newnoti").style.display = "block";
+    } else if (type==="new"){
+        clone.querySelector(".notiCard").style.backgroundColor = "#4CAF50";
+        clone.querySelector(".notiCard").style.color = "white";
         document.getElementById("notiList").prepend(clone);
-        $(".notiCard:first-child").fadeIn(1000);
-        //$(".notiCard:last-child");
+        const $card = $(".notiCard:first-child")
+        $card.slideDown(1000);
+        window.setTimeout(function(){
+            $card.delay(1000).css("background-color", "white");
+            $card.delay(1000).css("color", "black");
+        }, 2500)
+        //$(".notiCard:first-child");
     }
 }
 function setColor(object, color){

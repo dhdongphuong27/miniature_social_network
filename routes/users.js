@@ -16,6 +16,12 @@ function isAdmin(req) {
   }
   return false;
 }
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated() || req.session.user) {
+    return next();
+  }
+  res.redirect('/login');
+}
 router.get('/userid/:userid', function(req, res, next) {
   res.render('profile', { user: getUserfromSession(req) });
 });

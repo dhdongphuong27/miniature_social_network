@@ -1,29 +1,74 @@
 <div class="container-fluid h-100 gedf-wrapper">
+    <div class="row navbarmenu">
+        <div class="col-md-12">
+            <div class="dropdown text-light" style="text-align: center;">
+                <b id="navbar-title">TDT University</b>
+                <div class="button-dropdown justify-content-center" data-toggle="dropdown">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </div>
+                <div class="dropdown-menu bg-info">
+                    <a href="/users/userid/{{user._id}}" class="bg-info dropdown-item text-light">
+                        <i class="fa fa-address-card" aria-hidden="true"></i>
+                        Profile
+                    </a>
+                    <a href="/" class="bg-info dropdown-item text-light">
+                        <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                        Newsfeed
+                    </a>
+                    <a href="/notifications" class="bg-info dropdown-item text-light">
+                        <i class="fa fa-bell-o" aria-hidden="true"></i>
+                        Notification
+                    </a>
+                    <a href="/settings" class="bg-info dropdown-item text-light">
+                        <i class="fa fa-cogs" aria-hidden="true"></i>
+                        Settings
+                    </a>
+                    <a href="/users/signout" class="bg-info dropdown-item text-light">
+                        <i class="fa fa-sign-out" aria-hidden="true"></i>
+                        Sign out
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row h-100">
-        <div class="col-md-2" id="LSidebar">
+        <div class="col-sm-0 col-md-0 col-lg-2 col-xl-2" id="LSidebar">
             <div class="row sidebar-header">
                 <a href="/users/userid/{{user._id}}">
                     <div class="col-md-12">
                         <p id="username" class="text-center font-weight-light">{{user.name}}</p>
-                        <img id="avt" src={{user.avatar}} class="avatar border border-dark rounded-circle" width="80"
+                        <img id="avt" src={{user.avatar}} class="avatar border border-info rounded-circle" width="80"
                             height="80" />
                     </div>
                 </a>
             </div>
-            <div class="row sidebar-body bg-dark">
+            <div class="row sidebar-body">
                 <div class="col-md-12">
                     <ul class="list-goup list-unstyled">
-                        <li><a href="/" class="bg-dark list-group-item text-light">Newsfeed</a></li>
-                        <li><a href="/notifications" class="bg-dark list-group-item text-light">Notification</a></li>
-                        <li><a href="/settings" class="bg-dark list-group-item text-light">Settings</a></li>
-                        <li><a href="/users/signout" class="bg-dark list-group-item text-light">Sign out</a></li>
-                        <li><a id="userid" class="bg-dark list-group-item text-light d-none">{{user._id}}</a></li>
-                        <li><a id="userrole" class="bg-dark list-group-item text-light d-none">{{user.role}}</a></li>
+                        <li><a href="/" class="list-group-item newsfeed">
+                                <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                                Newsfeed
+                            </a></li>
+
+                        <li><a href="/notifications" class="list-group-item notification">
+                                <i class="fa fa-bell-o" aria-hidden="true"></i>
+                                Notification
+                            </a></li>
+                        <li><a href="/settings" class="list-group-item setting">
+                                <i class="fa fa-cogs" aria-hidden="true"></i>
+                                Settings
+                            </a></li>
+                        <li><a href="/users/signout" class="list-group-item singout">
+                                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                Sign out
+                            </a></li>
+                        <li><a id="userid" class="bg-info list-group-item text-light d-none">{{user._id}}</a></li>
+                        <li><a id="userrole" class="bg-info list-group-item text-light d-none">{{user.role}}</a></li>
                     </ul>
                 </div>
             </div>
         </div>
-        <div class="col-md-7 gedf-main pageCenter">
+        <div class="col-sm-12 col-md-7 col-lg-7 col-xl-7 gedf-main pageCenter">
             <div id="newsfeed">
                 <template id="postTemplate">
                     <div class="card gedf-card">
@@ -31,7 +76,8 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="mr-2">
-                                        <img class="rounded-circle avatar" width="45" src="/images/defaultavt.png" alt="">
+                                        <img class="rounded-circle avatar" width="45" src="/images/defaultavt.png"
+                                            alt="">
                                     </div>
                                     <div class="ml-2 pt-3 pl-2">
                                         <a class="profilelink">
@@ -49,53 +95,56 @@
                                             <i class="fa fa-ellipsis-h"></i>
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
-                                            <button type="button" class="editPostBtn dropdown-item btn btn-primary">Edit
+                                            <button type="button" class="editPostBtn dropdown-item btn btn-info">Edit
                                                 post</button>
-                                            <button type="button" class="deletePostBtn dropdown-item btn btn-primary">Delete
-                                                post</button>
+                                            <button type="button"
+                                                class="deletePostBtn dropdown-item btn btn-info">Delete post</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-            
+
                         </div>
                         <div class="card-body">
-            
+
                             <p class="card-text statuscontent">
                                 Hello world! aduuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu....
                             </p>
                             <form class="editPostForm">
                                 <textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
-                                    name="editcontent" class="form-control editcontent" rows="2" placeholder="" required></textarea>
-                                <button class="btn btn-dark savePostBtn">Save</button>
+                                    name="editcontent" class="form-control editcontent" rows="2" placeholder=""
+                                    required></textarea>
+                                <button class="btn btn-info savePostBtn">Save</button>
                             </form>
-            
+
                             <a class="video-link"></a>
-            
+
                         </div>
                         <div class="video-container">
-                            <iframe class="video" src="https://www.youtube.com/embed/AGepNnFXd3c" title="YouTube video player"
-                                frameborder="0"
+                            <iframe class="video" src="https://www.youtube.com/embed/AGepNnFXd3c"
+                                title="YouTube video player" frameborder="0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowfullscreen></iframe>
                         </div>
-            
+
                         <img src="" class="postImg" />
-            
+
                         <div class="card-footer">
                             <div class="pb-2">
-            
-                                <button type="button" class="btn btn-outline-primary custombtn showCommentsBtn" name="aslkdnas"><i
-                                        class="fa fa-comment"></i> Show comments</button>
-                                <button type="button" class="btn btn-outline-primary custombtn hideCommentsBtn" name="aslkdnas"><i
-                                        class="fa fa-comment"></i> Hide comments</button>
+
+                                <button type="button" class="btn btn-outline-info custombtn showCommentsBtn"
+                                    name="aslkdnas"><i class="fa fa-comment"></i> Show comments</button>
+                                <button type="button" class="btn btn-outline-info custombtn hideCommentsBtn"
+                                    name="aslkdnas"><i class="fa fa-comment"></i> Hide comments</button>
                             </div>
                             <div class="comment-container">
-            
+
                             </div>
-                            <textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' name="comment"
-                                class="form-control commentContentInput" rows="2" placeholder="" required></textarea>
-                            <button class="btn btn-dark commentBtn">Comment</button>
+                            <div class="input-group">
+                                <textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' name="comment"
+                                    class="form-control commentContentInput" rows="1" placeholder="" required></textarea>
+                                <button class="btn btn-info commentBtn">Comment</button>
+                            </div>
                         </div>
                     </div>
                 </template>
@@ -123,8 +172,7 @@
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
                                         <button type="button" name="commentid"
-                                            class="deleteCmtBtn dropdown-item btn btn-primary">Xóa
-                                            bình luận</button>
+                                            class="deleteCmtBtn dropdown-item btn btn-info">Delete comment</button>
                                     </div>
                                 </div>
                             </div>
@@ -133,16 +181,35 @@
                 </template>
             </div>
 
-
-
         </div>
-        <div class="col-md-3" id="RSidebar">
+        <div class="col-sm-0 col-md-5 col-lg-5 col-xl-3" id="RSidebar">
             <div class="row h-100">
-                <div class="col-md-12 RSidebar-content">
-                    <div class="notiHeader">
-                        <h5>Thông tin</h5>
+                <div class="col-md-12 RSidebar-content RSidebarInfo">
+                    <div class="infHeader">
+                        <h5>Information</h5>
                     </div>
-                    
+                    <div class="card infBody">
+                        <div class="card-img">
+                            <img src="hi.jpg" class="infBody-img" alt="...">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-body-item text-center" id="card-inf-name">Nguyễn Hoàng Quang Huy</h5>
+                            <hr>
+                            <b>Student ID:</b> <span class="card-body-item" id="card-inf-mssv">51800779</span><br>
+                            <b>Faculty:</b> <span class="card-body-item" id="card-inf-faculty">CNTT</span><br>
+                            <b>Class:</b> <span class="card-body-item" id="card-inf-class">18050203</span><br>
+                            <b>Phone:</b> <span class="card-body-item" id="card-inf-phone">123456789</span><br>
+                            <b>Email:</b> <span class="card-body-item" id="card-inf-email">51800779@student.tdtu.edu.vn</span><br>
+                        </div>
+                    </div>
+                </div>
+                <div class="popupnoticontainer">
+                    <template id="popupTemplate">
+                        <a class="btn btn-info popupnoti" title="Nhấn để xem" href="/notifications/details/"><span
+                                class="popupcategoryName">Khoa ldnlak sndddd dddd ddd dddd ddd dnflkan lkda slkd
+                                masdas</span> vừa đăng thông
+                            báo mới!!!</a>
+                    </template>
                 </div>
             </div>
         </div>

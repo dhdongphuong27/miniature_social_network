@@ -89,11 +89,18 @@ class UsersController {
                     
                     req.session.user = JSON.stringify(user);
                     req.session.save();
-                    Post.updateMany({ "ownerId": ObjectID(user._id) },
+                    Post.updateMany(
+                        { "ownerId": ObjectID(user._id) },
                         { "$set": { "ownerName": user.name, "ownerAvatar": user.avatar } 
+                    }, function(err){
+                        console.log(err)
                     })
-                    Comment.updateMany({ "ownerId": ObjectID(user._id) },
-                        { "$set": { "ownerName": user.name, "ownerAvatar": user.avatar } })
+                    Comment.updateMany(
+                        { "ownerId": ObjectID(user._id) },
+                        { "$set": { "ownerName": user.name, "ownerAvatar": user.avatar } 
+                    }, function (err) {
+                        console.log(err)
+                    })
                 })
                 res.json({ success: 'true' });
             }).catch((err) => {
