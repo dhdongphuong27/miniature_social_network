@@ -2,6 +2,7 @@ var express = require('express');
 const { route } = require('.');
 var router = express.Router();
 var notificationsController = require('../controllers/NotificationsController')
+const Notification = require('../models/Notification');
 
 function getUserfromSession(req) {
     if (req.user) {
@@ -27,7 +28,15 @@ router.get('/', isLoggedIn,function (req, res) {
 })
 
 router.get('/details/:notificationid', isLoggedIn, function (req, res) {
-    res.render('notidetail', { user: getUserfromSession(req) })
+    Notification.findById(req.params.notificationid, function (err, noti) {
+        if (noti.ownerId === getUserfromSession(req)._id){
+            res.render('notidetail', { user: getUserfromSession(req), owned: true })
+        }
+        else{
+            res.render('notidetail', { user: getUserfromSession(req), owned: false })
+        }
+    });
+    
 })
 
 router.get('/list/page/:page/limit/:limit', notificationsController.list); 

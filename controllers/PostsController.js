@@ -47,7 +47,7 @@ class PostsController {
                     console.log(err);
                     res.json({ success: 'false'});
                 } else {
-                    res.json({ success: 'true', postid: p._id});
+                    res.json({ success: 'true', postid: p._id, post: p});
                 }
             })
         })

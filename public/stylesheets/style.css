@@ -59,12 +59,24 @@ html, body {
 }
 #LSidebar .sidebar-header {
     margin: 0.25rem;
-    padding-top: 1rem;
+    padding-top: 0.5rem;
     background-color: white;
     border-radius: 15px !important;
     border-style: solid;
     border-color: #138496 !important;
-    height: 30%;
+    height: 25%;
+}
+.sidebar-header-avt{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+img.avatar{
+    margin-left: 30%
+}
+.avatar-primary{
+    width: 50%;
+    object-fit: cover;
 }
 #LSidebar .sidebar-body {
     background-color: #138496;
@@ -83,9 +95,7 @@ a.list-group-item:hover{
     background-color: #117a8b;
     text-shadow: 2px 2px black;
 }
-img.avatar {
-  margin-left: 30%
-}
+
 .custom-file-upload{
     width: 100%;
 }
@@ -316,9 +326,7 @@ p .title .desc{
     padding: 10px !important;
     padding-bottom: 5px !important;
 }
-.hideCommentsBtn{
-    display: none;
-}
+
 .custombox{
     width:100% !important;
 }
@@ -508,4 +516,49 @@ a :hover{
 }
 .btn-block{
     color: white !important;
+}
+
+.form-check-categories{
+    padding: 1%;
+    margin: 5px 0px 10px 0px;
+    border: 2px solid #129beb;
+    border-radius: 15px;
+    border-top: 20px solid #129beb;
+}
+.form-check{
+    font-style: italic;
+}
+#createBtn{
+    margin-top: 1%;
+    margin-bottom: 2%;
+}
+
+.editNotiBtn{
+    position: fixed;
+    bottom: 20px;
+    margin-left: 59%;
+    width: 10%
+}
+.deleteNotiBtn{
+    position: fixed;
+    bottom: 20px;
+    margin-left: 70%;
+    width: 10%
+}
+.createAcc{
+    width: 60%;
+    margin-left: 25%
+}
+.showCommentsBtn{
+    display: none;
+    color: #0dcaf0;
+}
+.showCommentsBtn:hover{
+    color: white;
+}
+.hideCommentsBtn{
+    color: #0dcaf0;
+}
+.hideCommentsBtn:hover{
+    color: white;
 }

@@ -32,10 +32,18 @@ io.on("connection", (socket) => {
   socket.on("disconnect", function(){
     
   })
-  socket.on('post notification', (msg) => {
-    console.log('message: ' + msg);
-    io.emit('post notification', msg);
+  socket.on('notification', (msg) => {
+    console.log('notification: ' + msg);
+    io.emit('notification', msg);
   });
+  socket.on('post', (msg) =>{
+    console.log('post: ' + msg);
+    io.emit('post', msg);
+  })
+  socket.on('comment', (msg) =>{
+    console.log('comment: ' + msg);
+    io.emit('comment', msg);
+  })
 });
 
 // view engine setup

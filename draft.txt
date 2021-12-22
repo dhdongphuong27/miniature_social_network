@@ -1,22 +1,56 @@
-<option value="1">Phòng Công tác học sinh sinh viên (CTHSSV)
-<option value="2">Phòng Đại học
-<option value="3">Phòng Sau đại học
-<option value="4">Phòng điện toán và máy tính
-<option value="5">Phòng khảo thí và kiểm định chất lượng
-<option value="6">Phòng tài chính
-<option value="7">TDT Creative Language Center
-<option value="8">Trung tâm tin học
-<option value="9">Trung tâm đào tạo phát triển xã hội (SDTC)
-<option value="10">Trung tâm phát triển Khoa học quản lý và Ứng dụng công nghệ (ATEM)
-<option value="11">Trung tâm hợp tác doanh nghiệp và cựu sinh viên
-<option value="12">Khoa Luật
-<option value="13">Trung tâm ngoại ngữ - tin học – bồi dưỡng văn hóa
-<option value="14">Viện chính sách kinh tế và kinh doanh
-<option value="15">Khoa Mỹ thuật công nghiệp
-<option value="16">Khoa Điện – Điện tử
-<option value="17">Khoa Công nghệ thông tin
-<option value="18">Khoa Quản trị kinh doanh
-<option value="19">Khoa Môi trường và bảo hộ lao động
-<option value="20">Khoa Lao động công đoàn
-<option value="21">Khoa Tài chính ngân hàng
-<option value="22">Khoa giáo dục quốc tế
+var clone = document.querySelector("#postTemplate").content.cloneNode(true);
+var nameEl = clone.querySelector(".display-name");
+nameEl.innerHTML = postinfo.ownerName;
+var profileLinkEl = clone.querySelector(".profilelink")
+profileLinkEl.href = "/users/userid/" + postinfo.ownerId;
+var statusEl = clone.querySelector(".statuscontent");
+statusEl.innerHTML = postinfo.content;
+var editEl = clone.querySelector(".editcontent");
+editEl.value = postinfo.content;
+editEl.name = postinfo._id;
+var commentEl = clone.querySelector(".commentContentInput");
+commentEl.name = postinfo._id;
+var editPostForm = clone.querySelector(".editPostForm")
+editPostForm.style.display = "none";
+var avatarEl = clone.querySelector(".avatar");
+avatarEl.src = postinfo.ownerAvatar;
+var videoLinkEl = clone.querySelector(".video-link");
+videoLinkEl.href = postinfo.videoSrc;
+videoLinkEl.innerHTML = postinfo.videoSrc;
+var createdAtEl = clone.querySelector(".created-at");
+createdAtEl.innerHTML = "<i class='fa fa-clock-o'></i> " + moment(postinfo.created_at).fromNow();
+createdAtEl.title = moment(postinfo.created_at).format('MMMM Do YYYY, h:mm:ss a');
+var showCommentsBtn = clone.querySelector('.showCommentsBtn')
+showCommentsBtn.name = postinfo._id;
+clone.querySelector(".modifyContent").name = postinfo.ownerId;
+clone.querySelector(".deletePostBtn").name = postinfo._id;
+var postImg = clone.querySelector(".postImg");
+var videoEl = clone.querySelector(".video");
+if (postinfo.imageSrc !== "") {
+    var imageSrc = postinfo.imageSrc;
+    imageSrc = imageSrc.replace("/public", "");
+    postImg.src = prepend + imageSrc;
+    videoEl.style.display = "none";
+    clone.querySelector(".video-container").style.display = "none";
+} else {
+    postImg.style.display = "none";
+    if (postinfo.videoSrc !== "") {
+        var videoSrc = postinfo.videoSrc;
+        videoSrc = videoSrc.replace("watch?v=", "embed/");
+        var videoSrc1 = ""
+        for (var j = 0; j < videoSrc.length; j++) {
+            if (videoSrc[j]==="&"){
+                break;
+            }
+            videoSrc1 += videoSrc[j]
+        }
+        videoEl.src = videoSrc1;
+        videoEl.width = "100%";
+    } else {
+        videoEl.style.display = "none";
+        clone.querySelector(".video-container").style.display = "none";
+        statusEl.style.fontSize = "200%";
+    }
+}
+if (postinfo.content === "") statusEl.style.display = "none";
+document.getElementById('newsfeed').append(clone);
