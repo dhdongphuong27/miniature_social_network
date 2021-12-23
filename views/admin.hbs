@@ -25,12 +25,14 @@
     </div>
     <div class="row h-100">
         <div class="col-md-2" id="LSidebar">
-            <div class="row h-25 sidebar-header">
-                <a href="#">
+            <div class="row sidebar-header">
+                <a href="/users/userid/{{user._id}}">
                     <div class="col-md-12">
-                        <p id="username" class="text-center font-weight-light">{{user.name}}</p>
-                        <img id="avt" src={{user.avatar}} class="avatar border border-info rounded-circle"
-                            width="80" height="80" />
+                        <p id="username" class="text-center font-weight-light" style="margin-bottom: 0.5rem;">
+                            {{user.name}}</p>
+                        <div class="sidebar-header-avt">
+                            <img id="avt" src={{user.avatar}} class="avatar-primary border border-dark rounded-circle" />
+                        </div>
                     </div>
                 </a>
             </div>
@@ -49,7 +51,7 @@
         <div class="col-md-7 gedf-main pageCenter">
             <div id="newsfeed">
                 <template id="postTemplate">
-                    <div class="card gedf-card">
+                    <div class="card gedf-card post">
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex justify-content-between align-items-center">
