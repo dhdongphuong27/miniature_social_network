@@ -13,15 +13,29 @@ $(document).ready(function () {
         });
     }
     if (page == "" || path.includes("users/userid")){
+        socket.on('post', function (msg) {
+            addOnePost(msg, "new", "");
+            followingPosts.push(msg._id)
+        });
         socket.on('comment', function (msg) {
-            console.log("received comments")
-            console.log(followingPosts)
-            console.log(msg.postid)
             if (followingPosts.includes(msg.postid)){
                 console.log("showing comments")
                 onCommentReceived(msg)
             }
         });
+        socket.on('delete post', function (msg) {
+            document.getElementById(msg).remove()
+            var index = followingPosts.indexOf(msg);
+            if (index !== -1) {
+                followingPosts.splice(index, 1);
+            }
+        });
+        socket.on('edit post', function (msg) {
+            onEditPostReceived(msg)
+        });
+        socket.on('delete comment', function (msg){
+            document.getElementById(msg).remove()
+        })
     }
     if (page=="")
     {
@@ -35,10 +49,7 @@ $(document).ready(function () {
                 getPosts("/posts/list/page/" + pageNum + "/limit/" + limit, "");
             }
         }
-        socket.on('post', function (msg) {
-            addOnePost(msg, "new", "");
-            followingPosts.push(msg._id)
-        });
+        
         try{ //only student run this code
             document.getElementById("postBtn").addEventListener('click', e => postArticle(e));
             document.getElementById('toggleVideoBtn').onclick = function (e) {
@@ -143,15 +154,22 @@ function saveNoti(e){
 function deleteNoti(e){
     console.log("delete")
 }
+function onEditPostReceived(msg){
+    document.getElementById(msg.postid).querySelector(".statuscontent").innerHTML = msg.editcontent
+    
+}
 function onCommentReceived(comment){
     var clone = document.querySelector("#cmtTemplate").content.cloneNode(true);
+    clone.querySelector(".card-header").id = comment._id;
     clone.querySelector(".avatar").src = comment.ownerAvatar;
     clone.querySelector(".display-name").innerHTML = comment.ownerName;
     clone.querySelector(".profilelink").href = "/users/userid/" + comment.ownerId;
     clone.querySelector(".commentcontent").innerHTML = comment.content;
     clone.querySelector(".deleteCmtBtn").name = comment._id;
     clone.querySelector(".modifyContent").name = comment.ownerId;
+    clone.querySelector(".deleteCmtBtn").addEventListener('click', e => deleteComment(e))
     document.getElementById(comment.postid).querySelector(".comment-container").append(clone)
+    removeNotOwned()
 }
 function getUserinfo(page){
     fetch("/users/info/userid/" + page).then(response => {
@@ -303,8 +321,6 @@ function removeNotOwned(){
 }
 function deletePost(e){
     const postId = e.currentTarget.name;
-    const post = e.currentTarget.parentNode.parentNode.parentNode
-        .parentNode.parentNode.parentNode;
     let data = {
         postid: postId,
     }
@@ -322,8 +338,7 @@ function deletePost(e){
         // Examine the text in the response
         response.json().then(function (data) {
             if (data.success == 'true') {
-                console.log("delete successfully")
-                post.remove();
+                socket.emit("delete post", postId)
             } else {
                 alert(data.err)
             }
@@ -352,8 +367,8 @@ function deleteComment(e) {
         // Examine the text in the response
         response.json().then(function (data) {
             if (data.success == 'true') {
-                console.log("delete successfully")
-                cmt.remove();
+                socket.emit("delete comment", btn.name)
+                //cmt.remove();
             } else {
                 alert(data.err)
             }
@@ -365,7 +380,7 @@ function editPost(e){
     const form = e.currentTarget.parentNode;
     const content = e.currentTarget.parentNode.parentNode.childNodes[1];
     const editcontentsection = e.currentTarget.parentNode.childNodes[1];
-    let data = {
+    let formdata = {
         postid: editcontentsection.name,
         editcontent: editcontentsection.value,
     }
@@ -374,7 +389,7 @@ function editPost(e){
         headers: {
             "Content-Type": 'application/json'
         },
-        body: JSON.stringify(data) // body data type must match "Content-Type" header
+        body: JSON.stringify(formdata) // body data type must match "Content-Type" header
     }).then(response => {
         if (response.status !== 200) {
             console.log('Looks like there was a problem. Status Code: + response.status')
@@ -383,9 +398,9 @@ function editPost(e){
         // Examine the text in the response
         response.json().then(function (data) {
             if (data.success == 'true') {
-                content.innerHTML = editcontentsection.value;
                 form.style.display = 'none';
                 content.style.display = 'block';
+                socket.emit("edit post", formdata)
             } else {
                 alert(data.err)
             }
@@ -457,7 +472,7 @@ function showComments(e) {
             removeAllChildNodes(btn.parentNode.parentNode.querySelector('.comment-container'));
             for (let i = 0; i < data.length; i++) {
                 var clone = document.querySelector("#cmtTemplate").content.cloneNode(true);
-                
+                clone.querySelector(".card-header").id = data[i]._id;
                 clone.querySelector(".avatar").src = data[i].ownerAvatar;
                 clone.querySelector(".display-name").innerHTML = data[i].ownerName;
                 clone.querySelector(".profilelink").href = "/users/userid/" + data[i].ownerId;
@@ -550,6 +565,7 @@ function addOnePost(postinfo, type, prepend){
     } else if (type==="new"){
         document.getElementById('newsfeed').prepend(clone);
     }
+    removeNotOwned();
 }
 
 function getPosts(route,prepend) {
@@ -636,72 +652,7 @@ function postArticle(e){
             if (data.success == 'true') {
                 socket.emit('post', data.post);
                 followingPosts.push(data.postid);
-                document.getElementById('postcontent').value === ""
-                /*var clone = document.querySelector("#postTemplate").content.cloneNode(true);
-                clone.querySelector(".post").id = data.postid
-                var nameEl = clone.querySelector(".display-name");
-                nameEl.innerHTML = document.getElementById('username').innerHTML.trim();
-                var statusEl = clone.querySelector(".statuscontent");
-                statusEl.innerHTML = document.getElementById('postcontent').value;
-                var avatarEl = clone.querySelector(".avatar");
-                avatarEl.src = document.getElementById("avt").src;
-                var editPostForm = clone.querySelector(".editPostForm")
-                var profileLinkEl = clone.querySelector(".profilelink")
-                profileLinkEl.href = "/users/userid/" + document.getElementById('userid').innerHTML.trim();
-                editPostForm.style.display = "none";
-                var commentEl = clone.querySelector(".commentContentInput");
-                commentEl.name = data.postid;
-                
-                clone.querySelector(".editPostBtn").addEventListener('click', e => toggleFormEdit(e))
-                clone.querySelector(".savePostBtn").addEventListener('click', e => editPost(e))
-                clone.querySelector(".deletePostBtn").addEventListener('click', e => deletePost(e))
-                clone.querySelector(".deletePostBtn").name = data.postid;
-                clone.querySelector(".commentBtn").addEventListener('click', e => postComment(e))
-
-                var editEl = clone.querySelector(".editcontent");
-                editEl.value = document.getElementById('postcontent').value;
-                editEl.name = data.postid;
-                
-                var createdAtEl = clone.querySelector(".created-at");
-                createdAtEl.innerHTML = "<i class='fa fa-clock-o'></i> " + moment(new Date()).fromNow();
-                createdAtEl.title = moment(new Date()).format('MMMM Do YYYY, h:mm:ss a');
-
-                var videoSrc = document.getElementById("videoinput").value
-                document.getElementById("videoinput").value = "";
-                var videoLinkEl = clone.querySelector(".video-link");
-                videoLinkEl.href = videoSrc;
-                videoLinkEl.innerHTML = videoSrc;
-
-                var postImg = clone.querySelector(".postImg");
-                var videoEl = clone.querySelector(".video");
-
-                if (inputFile.files[0]) {
-                    postImg.src = URL.createObjectURL(inputFile.files[0]);
-                    inputFile.value = "";
-                    videoEl.style.display = "none";
-                    clone.querySelector(".video-container").style.display = "none";
-                } else {
-                    postImg.style.display = "none";
-                    if (videoSrc !== "") {
-                        videoSrc = videoSrc.replace("watch?v=", "embed/");
-                        var videoSrc1 = ""
-                        for (var j = 0; j < videoSrc.length; j++) {
-                            if (videoSrc[j] === "&") {
-                                break;
-                            }
-                            videoSrc1 += videoSrc[j]
-                        }
-                        videoEl.src = videoSrc1;
-                    } else {
-                        videoEl.style.display = "none";
-                        clone.querySelector(".video-container").style.display = "none";
-                        statusEl.style.fontSize = "200%";
-                    }
-                    
-                }
-                document.getElementById('newsfeed').prepend(clone);
-
-                document.getElementById('postcontent').value = '';*/
+                document.getElementById('postcontent').value = '';
             } else {
                 // add your code here
             }

@@ -44,6 +44,18 @@ io.on("connection", (socket) => {
     console.log('comment: ' + msg);
     io.emit('comment', msg);
   })
+  socket.on('delete post', (msg) => {
+    console.log('delete post: ' + msg);
+    io.emit('delete post', msg);
+  })
+  socket.on('edit post', (msg) => {
+    console.log('edit post: ' + msg);
+    io.emit('edit post', msg);
+  })
+  socket.on('delete comment', (msg) => {
+    console.log('delete comment: ' + msg);
+    io.emit('delete comment', msg);
+  })
 });
 
 // view engine setup
