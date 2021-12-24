@@ -11,9 +11,6 @@ router.post('/create', function (req, res) {
 router.get('/list/page/:page/limit/:limit', postsController.list); 
 router.get('/list/userid/:userid/page/:page/limit/:limit', postsController.userPostList);
 
-router.put('/addcomment', function (req, res) {
-    postsController.addcomment(req, res)
-})
 router.put('/editpost', function (req, res) {
     postsController.editpost(req, res)
 })

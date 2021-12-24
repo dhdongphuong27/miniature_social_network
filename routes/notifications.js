@@ -23,6 +23,16 @@ router.post('/create', function (req, res) {
     notificationsController.create(req, res)
 });
 
+router.put('/edit', function (req, res) {
+    console.log(req.body.notiid)
+    console.log(req.body.editNotiTitle)
+    console.log(req.body.editNotiContent)
+    notificationsController.edit(req, res)
+})
+router.delete('/delete', function (req, res) {
+    notificationsController.delete(req, res)
+})
+
 router.get('/', isLoggedIn,function (req, res) {
     res.render('notification', { user: getUserfromSession(req) })
 })
@@ -40,7 +50,7 @@ router.get('/details/:notificationid', isLoggedIn, function (req, res) {
 })
 
 router.get('/list/page/:page/limit/:limit', notificationsController.list); 
-router.get('/slist/facultyid/:facultyid/title/:title/content/:content/page/:page/limit/:limit', notificationsController.slist); 
-router.get('/numpage', notificationsController.numpage);
+router.get('/slist/facultyid/:facultyid/title/:title/content/:content/page/:page/ownerId/:ownerId/limit/:limit', notificationsController.slist); 
+router.get('/numpage/facultyid/:facultyid/title/:title/content/:content/ownerId/:ownerId', notificationsController.numpage);
 router.get('/notificationid/:notificationid', notificationsController.getOne);
 module.exports = router;

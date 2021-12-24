@@ -100,9 +100,12 @@ $(document).ready(function () {
         var titlesearch = "";
         var contentsearch = "";
         var notiPageNum = 1;
-        getSpecificNotifications(category, titlesearch, contentsearch, notiPageNum, 10)
-        getNumberofPages();
-        document.getElementById("searchNotiBtn").addEventListener('click', e => searchNoti(notiPageNum))
+        getSpecificNotifications(category, titlesearch, contentsearch, notiPageNum, "", 10)
+        getNumberofPages("", "", "", "");
+        document.getElementById("searchNoti").addEventListener('click', e => searchNoti(notiPageNum))
+        document.getElementById("isMine").addEventListener('click', e => myNoti(e, notiPageNum))
+        document.getElementById("prev").addEventListener('click', e => previousNoti())
+        document.getElementById("next").addEventListener('click', e => nextNoti())
     }
     else if (page =="createacc")
     {
@@ -116,8 +119,10 @@ $(document).ready(function () {
         if (document.getElementById("userrole").innerHTML!=="student"){
             document.getElementById("studentOnly").remove();
             document.querySelector("#saveInfo").addEventListener('click', e => saveInfo(e, "faculty"))
+            
         }else{
             document.querySelector("#saveInfo").addEventListener('click', e => saveInfo(e, "student"))
+            document.querySelector("#resetAvt").addEventListener('click', e => resetAvt(e))
         }
     }
     else
@@ -136,6 +141,9 @@ $(document).ready(function () {
         }
         if (path.includes("notifications/details")){
             getNotiDetails(page)
+            document.querySelector(".editNotiBtn").addEventListener('click', e => toggEditForm(e));
+            document.querySelector(".saveNotiBtn").addEventListener('click', e => saveNoti(e));
+            document.querySelector(".deleteNotiBtn").addEventListener('click', e => deleteNoti(e));
         }
     }
     // If image not found
@@ -148,11 +156,70 @@ $(document).ready(function () {
         $(this).attr("src", "/images/imagenotfound.png");
     });
 })
+
+function toggEditForm(e){
+    e.currentTarget.style.display = "none";
+    e.currentTarget.parentNode.querySelector(".saveNotiBtn").style.display = "block";
+    document.querySelector(".editForm").style.display = "block";
+    document.querySelector("#rnew_content").style.display = "none";
+}
 function saveNoti(e){
-    console.log("save")
+    const btn = e.currentTarget;
+    const titleEl = document.querySelector("#rnews-header")
+    const contentEl = document.querySelector("#rnew_content")
+    let formdata = {
+        notiid: e.currentTarget.name,
+        editNotiTitle: document.querySelector("#editNotiTitle").value, 
+        editNotiContent: document.querySelector("#editNotiContent").value
+    }
+    fetch('/notifications/edit', {
+        method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+            "Content-Type": 'application/json'
+        },
+        body: JSON.stringify(formdata) // body data type must match "Content-Type" header
+    }).then(response => {
+        if (response.status !== 200) {
+            console.log('Looks like there was a problem. Status Code: + response.status')
+            return;
+        }
+        // Examine the text in the response
+        response.json().then(function (data) {
+            if (data.success == 'true') {
+                titleEl.innerHTML = document.querySelector("#editNotiTitle").value;
+                contentEl.innerHTML = document.querySelector("#editNotiContent").value;
+                btn.style.display = "none";
+                btn.parentNode.querySelector(".editNotiBtn").style.display = "block";
+                document.querySelector(".editForm").style.display = "none";
+                contentEl.style.display = "block";
+            } else {
+                alert(data.err)
+            }
+        });
+
+    })
+    
 }
 function deleteNoti(e){
-    console.log("delete")
+    const notiid = e.currentTarget.name;
+    let data = {
+        notiid: notiid,
+    }
+    fetch('/notifications/delete', {
+        method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+            "Content-Type": 'application/json'
+        },
+        body: JSON.stringify(data) // body data type must match "Content-Type" header
+    }).then(response => {
+        if (response.status !== 200) {
+            console.log('Looks like there was a problem. Status Code: + response.status')
+            return;
+        }else{
+            console.log("redirecting")
+            window.location.href = "/notifications";
+        }
+    })
 }
 function onEditPostReceived(msg){
     document.getElementById(msg.postid).querySelector(".statuscontent").innerHTML = msg.editcontent
@@ -186,6 +253,23 @@ function getUserinfo(page){
             document.querySelector("#card-inf-name").innerHTML = data.name;
             document.querySelector(".infBody-img").src = data.avatar;
         })
+    })
+}
+function resetAvt(e) {
+    e.preventDefault();
+    let data = {
+        
+    }
+    fetch('/users/resetAvt', {
+        method: 'PUT',
+        body: data
+    }).then(response => {
+        if (response.status !== 200) {
+            console.log(response.status)
+            return;
+        } else {
+            document.querySelector(".avatar-primary").src = "/images/defaultavt.png"
+        }
     })
 }
 function saveInfo(e, role){
@@ -240,16 +324,24 @@ function getNotiDetails(page){
             document.querySelector("#rnew_content").innerHTML = data.content;
             document.querySelector("#editNotiTitle").value = data.title;
             document.querySelector("#editNotiContent").value = data.content;
+            document.querySelector(".saveNotiBtn").name = data._id;
+            document.querySelector(".deleteNotiBtn").name = data._id;
         })
     })
 }   
-function getNumberofPages(){
-    fetch("/notifications/numpage").then(response =>{
+function getNumberofPages(facultyid, title, content, ownerId){
+    if (facultyid === "") facultyid = "-";
+    if (title === "") title = "-";
+    if (content === "") content = "-";
+    if (ownerId === "") ownerId = "-";
+    fetch("/notifications/numpage/facultyid/" + facultyid + "/title/" + title + "/content/" + content + "/ownerId/" + ownerId).then(response =>{
         if (response.status !== 200) {
             console.log('Looks like there was a problem. Status Code:' + response.status)
             return;
         }
         response.json().then(data => {
+            var pageEl = document.querySelector(".page")
+            removeAllChildNodes(pageEl)
             var num = parseInt(data)
             var page = Math.ceil(num / 10)
             for (var i = 1; i <= page; i++){
@@ -260,7 +352,7 @@ function getNumberofPages(){
                 }
                 btn.innerHTML = i;
                 btn.addEventListener('click', e => loadPage(e))
-                document.querySelector(".page").append(clone)
+                pageEl.append(clone)
             }
         })
     })
@@ -271,20 +363,57 @@ function loadPage(e) {
     category = document.querySelector("#category").value;
     titlesearch = document.querySelector("#titlesearch").value;
     contentsearch = document.querySelector("#contentsearch").value;
-    getSpecificNotifications(category, titlesearch, contentsearch, e.currentTarget.innerHTML, 10);
+    if (document.getElementById('isMine').checked) {
+        ownerId = document.getElementById('isMine').value;
+    } else {
+        ownerId = "";
+    }
+    getSpecificNotifications(category, titlesearch, contentsearch, e.currentTarget.innerHTML, ownerId, 10);
+}
+function resetActivePage(){
+    $(".btn-page").removeClass("active");
+    $(".btn-page:first-child").addClass("active");
 }
 function searchNoti(notiPageNum){
     category = document.querySelector("#category").value;
     titlesearch = document.querySelector("#titlesearch").value;
     contentsearch = document.querySelector("#contentsearch").value;
-    getSpecificNotifications(category, titlesearch, contentsearch, notiPageNum, 10)
+    if (document.getElementById('isMine').checked){
+        ownerId = document.getElementById('isMine').value;
+    } else {
+        ownerId = "";
+    }
+    getNumberofPages(category, titlesearch, contentsearch, ownerId)
+    resetActivePage() 
+    getSpecificNotifications(category, titlesearch, contentsearch, notiPageNum, ownerId, 10)
 }
-function getSpecificNotifications(facultyid, title, content, notiPageNum, notiLimit){
+function myNoti(e, notiPageNum){
+    category = document.querySelector("#category").value;
+    titlesearch = document.querySelector("#titlesearch").value;
+    contentsearch = document.querySelector("#contentsearch").value;
+    if (document.getElementById('isMine').checked){
+        ownerId = document.getElementById('isMine').value;
+    }else{
+        ownerId = "";
+    }
+    getNumberofPages(category, titlesearch, contentsearch, ownerId)
+    resetActivePage()
+    
+    getSpecificNotifications(category, titlesearch, contentsearch, notiPageNum, ownerId, 10)
+}
+function previousNoti(){
+    $(".active").prev().click()
+}
+function nextNoti() {
+    $(".active").next().click()
+}
+function getSpecificNotifications(facultyid, title, content, notiPageNum, ownerId, notiLimit){
     if (facultyid === "") facultyid = "-";
     if (title === "") title = "-";
     if (content === "") content = "-";
+    if (ownerId === "") ownerId = "-";
     removeAllChildNodes(document.querySelector("#notificationlist"))
-    fetch("/notifications/slist/facultyid/"+facultyid+"/title/"+title+"/content/"+content+"/page/" + notiPageNum + "/limit/" + notiLimit)
+    fetch("/notifications/slist/facultyid/" + facultyid + "/title/" + title + "/content/" + content + "/page/" + notiPageNum + "/ownerId/" + ownerId + "/limit/" + notiLimit)
     .then(response => {
         if (response.status !== 200) {
             console.log('Looks like there was a problem. Status Code:' + response.status)
@@ -723,6 +852,7 @@ function postNoti(e){
                 document.querySelector(".postNotiForm").reset()
                 document.querySelector(".postNotiContainer").style.display = 'block';
                 $(".postNotiContainer").delay(4000).fadeOut(300);
+                addOneNotification(data.noti, "new")
                 socket.emit('notification', data.noti);
             } else {
                 alert(data.err)

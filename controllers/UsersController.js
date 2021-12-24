@@ -72,40 +72,86 @@ class UsersController {
             }
             var ObjectID = require('mongodb').ObjectID;
             path = path.replace("./public", "")
-            User.updateOne(
-                { "_id": ObjectID(getUserfromSession(req)._id) },
-                {
-                    $set: {
-                        name: fields.name[0],
-                        class: fields.class[0],
-                        faculty: fields.faculty[0],
-                        phone: fields.phone[0],
-                        password: fields.password[0],
-                        avatar: path
+            if (typeof fields.name === 'undefined'){
+                User.updateOne(
+                    { "_id": ObjectID(getUserfromSession(req)._id) },
+                    {
+                        $set: {
+                            password: fields.password[0],
+                        }
                     }
-                }
-            ).then((obj) => {
-                User.findById(ObjectID(getUserfromSession(req)._id), function (err, user) {
-                    
-                    req.session.user = JSON.stringify(user);
-                    req.session.save();
-                    Post.updateMany(
-                        { "ownerId": ObjectID(user._id) },
-                        { "$set": { "ownerName": user.name, "ownerAvatar": user.avatar } 
-                    }, function(err){
-                        console.log(err)
-                    })
-                    Comment.updateMany(
-                        { "ownerId": ObjectID(user._id) },
-                        { "$set": { "ownerName": user.name, "ownerAvatar": user.avatar } 
-                    }, function (err) {
-                        console.log(err)
-                    })
+                ).then((obj) => {
+                    res.json({ success: 'true' });
                 })
-                res.json({ success: 'true' });
-            }).catch((err) => {
-                res.json({ success: 'false' });
-            })
+            }else{
+                User.updateOne(
+                    { "_id": ObjectID(getUserfromSession(req)._id) },
+                    {
+                        $set: {
+                            name: fields.name[0],
+                            class: fields.class[0],
+                            faculty: fields.faculty[0],
+                            phone: fields.phone[0],
+                            password: fields.password[0],
+                            avatar: path
+                        }
+                    }
+                ).then((obj) => {
+                    User.findById(ObjectID(getUserfromSession(req)._id), function (err, user) {
+
+                        req.session.user = JSON.stringify(user);
+                        req.session.save();
+                        Post.updateMany(
+                            { "ownerId": ObjectID(user._id) },
+                            {
+                                "$set": { "ownerName": user.name, "ownerAvatar": user.avatar }
+                            }, function (err) {
+                            })
+                        Comment.updateMany(
+                            { "ownerId": ObjectID(user._id) },
+                            {
+                                "$set": { "ownerName": user.name, "ownerAvatar": user.avatar }
+                            }, function (err) {
+                            })
+                    })
+                    res.json({ success: 'true' });
+                }).catch((err) => {
+                    res.json({ success: 'false' });
+                })
+            }
+            
+        })
+    }
+    resetAvt(req, res){
+        var ObjectID = require('mongodb').ObjectID;
+        User.updateOne(
+            { "_id": ObjectID(getUserfromSession(req)._id) },
+            {
+                $set: {
+                    avatar: "/images/defaultavt.png"
+                }
+            }
+        ).then((obj) => {
+            var user = getUserfromSession(req)
+            user.avatar = "/images/defaultavt.png";
+            req.session.user = JSON.stringify(user);
+            req.session.save();
+            Post.updateMany(
+                { "ownerId": ObjectID(user._id) },
+                {
+                    "$set": {"ownerAvatar": user.avatar }
+                }, function (err) {
+                })
+            Comment.updateMany(
+                { "ownerId": ObjectID(user._id) },
+                {
+                    "$set": {"ownerAvatar": user.avatar }
+                }, function (err) {
+                })
+            res.json({ success: 'true' });
+        }).catch((err) => {
+            console.log("odnaslkdn")
+            res.json({ success: 'false' });
         })
     }
     getUserInfo(req,res){

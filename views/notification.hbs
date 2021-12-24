@@ -82,10 +82,10 @@
                             <label for="contentsearch">Content:</label>
                             <input type="text" class="form-control" id="contentsearch" placeholder="">
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-5">
                             <label for="category">Select faculty/department</label>
                             <select class="form-control" id="category">
-                                <option value=""></option>
+                                <option value="">All</option>
                                 <option value="1">Phòng Công tác học sinh sinh viên (CTHSSV)</option>
                                 <option value="2">Phòng Đại học</option>
                                 <option value="3">Phòng Sau đại học</option>
@@ -110,17 +110,27 @@
                                 <option value="22">Khoa giáo dục quốc tế</option>
                             </select>
                         </div>
-                        <div class="col-sm-2" id="searchNotiBtn">
+                        <div class="col-sm-2">
+                            <article class="feature1">
+                                <input type="checkbox" value={{user._id}} id="isMine"/>
+                                <div>
+                                    <span>
+                                        My notification
+                                    </span>
+                                </div>
+                            </article>
+                        </div>
+                        <div class="col-sm-1 searchNoti">
                             <button type="button" class="btn btn-info white-text" id="searchNoti">Search</button>
                         </div>
                     </div>
                 </form>
                 <div class="pagination justify-content-center">
-                    <button class="btn btn-page prev">«</button>
+                    <button class="btn btn-range prev" id="prev">«</button>
                     <div class="page">
                         
                     </div>
-                    <button class="btn btn-page next">»</button>
+                    <button class="btn btn-range next" id="next">»</button>
                 </div>
             </div>
             <div>
@@ -130,6 +140,7 @@
             </div>
         </div>
         
+
         <template id="notificationTemplate">
             <div class="list box text-shadow">
                 <div class="list-item box custombox position-relative">

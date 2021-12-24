@@ -39,7 +39,9 @@ router.post('/createfacultyacc', function(req, res, next) {
 router.put('/settings', function(req, res, next) {
   usersController.settings(req, res)
 })
-
+router.put('/resetAvt', function (req, res, next) {
+  usersController.resetAvt(req, res)
+})
 router.get('/signout', function(req, res, next) {
   req.session.destroy();
   res.redirect('/login');

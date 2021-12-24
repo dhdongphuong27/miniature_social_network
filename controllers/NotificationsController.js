@@ -38,6 +38,32 @@ class NotificationsController {
             res.json({success: 'false', err: 'You dont have permission to post notification'});
         }
     }
+    edit(req, res) {
+        Notification.updateOne(
+            { "_id": req.body.notiid },
+            {
+                $set: {
+                    title: req.body.editNotiTitle,
+                    content: req.body.editNotiContent
+                }
+            }
+        ).then((obj) =>{
+            res.json({success: 'true'})
+        }).catch((e) => {
+            console.log(e)
+            res.json({success: 'false'})
+        });
+    }
+    delete(req, res) {
+        var ObjectID = require('mongodb').ObjectID;
+        Notification.deleteOne(
+            { _id: ObjectID(req.body.notiid) },
+        ).then((obj) => {
+            res.json({ success: 'true' });
+        }).catch((err) => {
+            res.json({ success: 'false' });
+        })
+    }
     async list(req, res) {
         let page = parseInt(req.params.page);
         let limit = parseInt(req.params.limit);
@@ -57,6 +83,9 @@ class NotificationsController {
         if (!(req.params.title === "-")){
             query.title = { "$regex": req.params.title, "$options": "i" }
         }
+        if (!(req.params.ownerId === "-")) {
+            query.ownerId = req.params.ownerId
+        }
         if (!(req.params.content === "-")){
             query.content = { "$regex": req.params.content, "$options": "i" }
         }
@@ -65,7 +94,20 @@ class NotificationsController {
         res.json(notifications);
     }
     async numpage(req, res){
-        const num = await Notification.countDocuments();
+        let query = {};
+        if (!(req.params.facultyid === "-")) {
+            query.categoryId = req.params.facultyid
+        }
+        if (!(req.params.title === "-")) {
+            query.title = { "$regex": req.params.title, "$options": "i" }
+        }
+        if (!(req.params.ownerId === "-")) {
+            query.ownerId = req.params.ownerId
+        }
+        if (!(req.params.content === "-")) {
+            query.content = { "$regex": req.params.content, "$options": "i" }
+        }
+        const num = await Notification.countDocuments(query);
         res.json(num);
     }
     async getOne(req, res){
