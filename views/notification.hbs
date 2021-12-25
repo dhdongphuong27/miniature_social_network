@@ -110,16 +110,18 @@
                                 <option value="22">Khoa giáo dục quốc tế</option>
                             </select>
                         </div>
-                        <div class="col-sm-2">
-                            <article class="feature1">
-                                <input type="checkbox" value={{user._id}} id="isMine"/>
-                                <div>
-                                    <span>
-                                        My notification
-                                    </span>
-                                </div>
-                            </article>
-                        </div>
+                        {{#if isFaculty}}
+                            <div class="col-sm-2">
+                                <article class="feature1">
+                                    <input type="checkbox" value={{user._id}} id="isMine"/>
+                                    <div>
+                                        <span>
+                                            My notification
+                                        </span>
+                                    </div>
+                                </article>
+                            </div>
+                        {{/if}}
                         <div class="col-sm-1 searchNoti">
                             <button type="button" class="btn btn-info white-text" id="searchNoti">Search</button>
                         </div>

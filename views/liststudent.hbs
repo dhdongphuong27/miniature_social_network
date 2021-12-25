@@ -58,31 +58,31 @@
                 </div>
             </div>
             <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10 gedf-main pageCenter" style="padding: 5%;">
-                <div class="viewFaculty-header">
-                    <h5>Faculty Account Information</h5>
+                <div class="viewStudent-header">
+                    <h5>Student Account Information</h5>
                 </div>
-                <div class="viewFaculty-body">
+                <div class="viewStudent-body">
                     <div class="table-reponsive">
-                        <table class="viewFaculty-list table table--stripped table-hover table-bordered">
+                        <table class="viewStudent-list table table--stripped table-hover table-bordered">
                             <thead class="table-primary" style="position: sticky; top: 0; z-index: 1;">
-                                <th scope="col" class="col-4">Name</th>
-                                <th scope="col" class="col-3">Username</th>
+                                <th scope="col" class="col-3">Name</th>
+                                <th scope="col" class="col-4">Faculty</th>
+                                <th scope="col" class="col-1">Class</th>
+                                <th scope="col" class="col-1">Phone</th>
+                                <th scope="col" class="col-3">Email</th>
                                 <th scope="col" class="col-1">Password</th>
-                                <th scope="col" class="col-4">Categories</th>
                             </thead>
-                            <tbody  id="facultyList">
-                                <template id="facultyRowTemplate">
-                                    <tr class="viewFaculty-list-item">
-                                        <td class="faculty-name">Khoa Công nghệ thông tin</td>
-                                        <td class="faculty-email">khoacntt@tdtu.edu.vn</td>
-                                        <td class="faculty-pwd">123456</td>
-                                        <td class="faculty-categories">
-                                        </td>
+                            <tbody id="studentList">
+                                <template id="studentRowTemplate">
+                                    <tr class="viewStudent-list-item">
+                                        <td class="student-name">Nguyễn Hoàng Quang Huy</td>
+                                        <td class="student-faculty">Khoa Công nghệ thông tin</td>
+                                        <td class="student-class">18050203</td>
+                                        <td class="student-phone"></td>
+                                        <td class="student-email">51800779@student.tdtu.edu.vn</td>
+                                        <td class="student-pwd">123456</td>
                                     </tr>
-                                </template>
-                                <template id="categoryTemplate">
-                                    <li class="faculty-categories-item">category 1</li>
-                                </template>
+                                </template> 
                             </tbody>
                         </table> 
                     </div>                

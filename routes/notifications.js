@@ -18,7 +18,12 @@ function isLoggedIn(req, res, next) {
     }
     res.redirect('/login');
 }
-
+function isFaculty(req) {
+    if (getUserfromSession(req).role === 'faculty') {
+        return true;
+    }
+    return false
+}
 router.post('/create', function (req, res) {
     notificationsController.create(req, res)
 });
@@ -34,7 +39,7 @@ router.delete('/delete', function (req, res) {
 })
 
 router.get('/', isLoggedIn,function (req, res) {
-    res.render('notification', { user: getUserfromSession(req) })
+    res.render('notification', { user: getUserfromSession(req), isFaculty: isFaculty(req) })
 })
 
 router.get('/details/:notificationid', isLoggedIn, function (req, res) {

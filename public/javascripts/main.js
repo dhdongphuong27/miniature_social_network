@@ -125,6 +125,13 @@ $(document).ready(function () {
             document.querySelector("#resetAvt").addEventListener('click', e => resetAvt(e))
         }
     }
+    else if (page==="faculty")
+    {
+        loadFacultyList()
+    }
+    else if (page === "student") {
+        loadStudentList()
+    }
     else
     {  
         if (path.includes("users/userid")) {
@@ -156,6 +163,52 @@ $(document).ready(function () {
         $(this).attr("src", "/images/imagenotfound.png");
     });
 })
+function loadFacultyList(){
+    fetch('/users/list/faculty')
+        .then(response => {
+            if (response.status !== 200) {
+                console.log('Looks like there was a problem. Status Code:' + response.status)
+                return;
+            }
+            response.json().then(data => {
+                for (let i = 0; i < data.length; i++) {
+                    var clone = document.querySelector("#facultyRowTemplate").content.cloneNode(true);
+                    clone.querySelector(".faculty-name").innerHTML = data[i].name;
+                    clone.querySelector(".faculty-email").innerHTML = data[i].email;
+                    clone.querySelector(".faculty-pwd").innerHTML = data[i].password;
+                    var categories = data[i].permission
+                    for (let j = 0; j < categories.length; j++) {
+                        var clone1 = document.querySelector("#categoryTemplate").content.cloneNode(true);
+                        clone1.querySelector(".faculty-categories-item").innerHTML = categories[j].categoryName;
+                        clone.querySelector(".faculty-categories").append(clone1)
+                    }
+                    document.querySelector("#facultyList").append(clone)
+                }
+            })
+        })
+}
+function loadStudentList(){
+    fetch('/users/list/student')
+        .then(response => {
+            if (response.status !== 200) {
+                console.log('Looks like there was a problem. Status Code:' + response.status)
+                return;
+            }
+            response.json().then(data => {
+                for (let i = 0; i < data.length; i++) {
+                    var clone = document.querySelector("#studentRowTemplate").content.cloneNode(true);
+                    clone.querySelector(".student-name").innerHTML = data[i].name;
+                    clone.querySelector(".student-email").innerHTML = data[i].email;
+                    clone.querySelector(".student-pwd").innerHTML = data[i].password;
+                    clone.querySelector(".student-faculty").innerHTML = data[i].faculty;
+                    clone.querySelector(".student-class").innerHTML = data[i].class;
+                    clone.querySelector(".student-phone").innerHTML = data[i].phone;
+                    
+                    document.querySelector("#studentList").append(clone)
+                }
+            })
+        })
+}
 
 function toggEditForm(e){
     e.currentTarget.style.display = "none";
@@ -274,12 +327,13 @@ function resetAvt(e) {
 }
 function saveInfo(e, role){
     e.preventDefault();
+    const faculty = document.querySelector("#faculty")
     const formData = new FormData();
     if (role==="student"){
         const inputFile = document.querySelector("#avatarInput");
         formData.append("name", document.querySelector("#nameInput").value)
         formData.append("class", document.querySelector("#classInput").value)
-        formData.append("faculty", document.querySelector("#facultyInput").value)
+        formData.append("faculty", faculty.options[faculty.selectedIndex].text)
         formData.append("phone", document.querySelector("#phoneInput").value)
         formData.append("password", document.querySelector("#passwordInput").value)
         formData.append("avatar", inputFile.files[0]);
@@ -561,18 +615,6 @@ function postComment(e) {
             // Examine the text in the response
             response.json().then(function (data) {
                 if (data.success == 'true') {
-                    /* done with socket io
-                    var clone = document.querySelector("#cmtTemplate").content.cloneNode(true);
-
-                    clone.querySelector(".avatar").src = document.getElementById("avt").src;
-                    clone.querySelector(".display-name").innerHTML = document.getElementById('username').innerHTML.trim();
-                    clone.querySelector(".profilelink").href = "/users/userid/" + document.querySelector("#userid").innerHTML;
-                    clone.querySelector(".commentcontent").innerHTML = commentContentSection.value;
-                    clone.querySelector(".deleteCmtBtn").addEventListener('click', e => deleteComment(e))
-                    clone.querySelector(".deleteCmtBtn").name = data.commentid;
-                    btn.parentNode.parentNode.querySelector('.comment-container').append(clone)
-                    
-                    */
                     commentContentSection.value = ""
                     socket.emit('comment', data.comment);
                 } else {
@@ -790,6 +832,13 @@ function postArticle(e){
 }
 function createAccount(e){
     e.preventDefault();
+    document.querySelector(".form-check-categories").style.borderColor = "#129beb";
+    document.querySelector("#name").style.borderColor = "#129beb";
+    document.querySelector("#email").style.borderColor = "#129beb";
+    document.querySelector("#pwd").style.borderColor = "#129beb";
+    var facultyname = document.getElementById('name').value;
+    var facultyemail = document.getElementById('email').value;
+    var facultypassword = document.getElementById('pwd').value;
     var categories = []
     for (var i = 1; i <= 22; i++) {
         var checkBox = document.getElementById(i.toString())
@@ -797,10 +846,34 @@ function createAccount(e){
             categories.push([i.toString(), checkBox.value]);
         }
     }
+    var success = true;
+    if (categories.length === 0){
+        document.querySelector(".form-check-categories").style.borderColor = "red";
+        createAccAlert("Please check your information")
+        success = false;
+    }
+    if (facultyname === "") {
+        document.querySelector("#name").style.borderColor = "red";
+        createAccAlert("Please check your information")
+        success = false;
+    }
+    if (facultyemail === "") {
+        document.querySelector("#email").style.borderColor = "red";
+        createAccAlert("Please check your information")
+        success = false;
+    }
+    if (facultypassword === "") {
+        document.querySelector("#pwd").style.borderColor = "red";
+        createAccAlert("Please check your information")
+        success = false;
+    }
+    if (success === false) {
+        return
+    }
     let data = {
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        password: document.getElementById('pwd').value,
+        name: facultyname,
+        email: facultyemail,
+        password: facultypassword,
         categories: categories
     }
     fetch('/users/createfacultyacc', {
@@ -815,10 +888,16 @@ function createAccount(e){
             return;
         }
         response.json().then(function (data) {
+            document.querySelector(".form-check-categories").style.borderColor = "#129beb";
+            document.querySelector("#name").style.borderColor = "#129beb";
+            document.querySelector("#email").style.borderColor = "#129beb";
+            document.querySelector("#pwd").style.borderColor = "#129beb";
             if (data.success == 'true') {
                 document.querySelector(".createAccForm").reset()
                 document.querySelector(".postNotiContainer").style.display = 'block';
+                document.querySelector("#postNotiSuccess").innerHTML = "Create account successfully";
                 $(".postNotiContainer").delay(4000).fadeOut(300);
+                
             } else {
                 alert(data.err)
             }
@@ -826,6 +905,12 @@ function createAccount(e){
 
     })
     
+}
+function createAccAlert(err){
+    document.querySelector(".postNotiContainer").style.display = 'block';
+    document.querySelector("#postNotiSuccess").innerHTML = err;
+    document.querySelector("#postNotiSuccess").style.backgroundColor = "red";
+    $(".postNotiContainer").delay(4000).fadeOut(300);
 }
 function postNoti(e){
     var notiTextArea = document.querySelector("#noticontent")

@@ -95,6 +95,9 @@ passport.use(new GoogleStrategy({
             name: profile.displayName,
             email: email,
             avatar: "/images/defaultavt.png",
+            faculty: "",
+            class: "",
+            phone: "",
             password: utils.getRndInteger(100000, 999999),
             role: 'student'
           }).save()

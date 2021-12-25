@@ -15,6 +15,14 @@
                         <i class="fa fa-newspaper-o" aria-hidden="true"></i>
                         Create account
                     </a>
+                    <a href="/faculty" class="bg-info dropdown-item text-light">
+                        <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                        Faculty/Department
+                    </a>
+                    <a href="/student" class="bg-info dropdown-item text-light">
+                        <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                        Student
+                    </a>
                     <a href="/users/signout" class="bg-info dropdown-item text-light">
                         <i class="fa fa-sign-out" aria-hidden="true"></i>
                         Sign out
@@ -41,6 +49,8 @@
                     <ul class="list-goup list-unstyled">
                         <li><a href="/" class="list-group-item">Newsfeed</a></li>
                         <li><a href="/createacc" class="list-group-item info">Create account</a></li>
+                        <li><a href="/faculty" class="list-group-item info">Faculty/Department</a></li>
+                        <li><a href="/student" class="list-group-item info">Student</a></li>
                         <li><a href="/users/signout" class="list-group-item info">Sign out</a></li>
                         <li><a id="userid" class="list-group-item text-light d-none">{{user.id}}</a></li>
                         <li><a id="userrole" class="list-group-item text-light d-none">{{user.role}}</a></li>
@@ -51,17 +61,17 @@
         <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10 gedf-main pageCenter createAcc">
             <form class="createAccForm">
                 <div class="form-group">
-                    <label for="exampleInputEmail1"><b>Email</b></label>
+                    <label for="email"><b>Email</b></label>
                     <input type="email" class="form-control" id="email" aria-describedby="emailHelp"
                         placeholder="Username" autofocus required>
                     <small id="emailHelp" class="form-text text-muted"></small>
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword1"><b>Password</b></label>
+                    <label for="password"><b>Password</b></label>
                     <input type="password" class="form-control" id="pwd" placeholder="Password" required>
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword1"><b>Faculty</b></label>
+                    <label for="name"><b>Faculty</b></label>
                     <input type="text" class="form-control" id="name" placeholder="Faculty name" required>
                 </div>
                 <hr>
@@ -95,7 +105,7 @@
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="TDT Creative Language Center" id="7">
-                        <label class="form-check-label" for="7">TDT Creative Language Cente</label>
+                        <label class="form-check-label" for="7">TDT Creative Language Center</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="Trung tâm tin học" id="8">

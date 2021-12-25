@@ -159,5 +159,13 @@ class UsersController {
             res.json(user);
         });
     }
+    async facultylist(req, res) {
+        let faculties = await User.find({role: 'faculty'});
+        res.json(faculties);
+    }
+    async studentlist(req, res) {
+        let students = await User.find({ role: 'student' });
+        res.json(students);
+    }
 }
 module.exports = new UsersController()

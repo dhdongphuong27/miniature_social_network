@@ -16,15 +16,16 @@ function isAdmin(req) {
   }
   return false;
 }
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated() || req.session.user) {
-    return next();
-  }
-  res.redirect('/login');
-}
 router.get('/userid/:userid', function(req, res, next) {
-  res.render('profile', { user: getUserfromSession(req) });
+  if (getUserfromSession(req).role==='student'){
+    res.render('profile', { user: getUserfromSession(req) });
+  }
+  else{
+    res.redirect('/')
+  }
 });
+router.get('/list/faculty', usersController.facultylist); 
+router.get('/list/student', usersController.studentlist);
 router.get('/info/userid/:userid', usersController.getUserInfo);
 router.post('/createfacultyacc', function(req, res, next) {
   if (isAdmin(req))
