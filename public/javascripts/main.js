@@ -823,7 +823,7 @@ function postArticle(e){
             if (data.success == 'true') {
                 socket.emit('post', data.post);
                 followingPosts.push(data.postid);
-                document.getElementById('postcontent').value = '';
+                document.getElementById('postForm').reset()
             } else {
                 // add your code here
             }
