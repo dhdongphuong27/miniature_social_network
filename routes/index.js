@@ -38,14 +38,14 @@ function isFaculty(req){
 router.post('/login', function(req, res, next){
 
   User.findOne({ email: req.body.email }, function (err, user) {
-    if (req.body.password == user.password)
+    if (err){
+      res.redirect('/login');
+    }
+    else if (req.body.password == user.password)
     {
       req.session.user = JSON.stringify(user);
       res.redirect('/');
     }
-  }).catch((err) => {
-    console.log(err)
-    res.redirect('/login')
   })
   
 })
