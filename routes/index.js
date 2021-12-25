@@ -36,19 +36,14 @@ function isFaculty(req){
 }
 
 router.post('/login', function(req, res, next){
-
-  User.findOne({ email: req.body.email }, function (err, user) {
-    if (err){
-      console.log(err)
-      res.redirect('/login');
-    }
-    else if (req.body.password == user.password)
-    {
+  User.findOne({ email: req.body.email }).then(user=>{
+    if (user){
       req.session.user = JSON.stringify(user);
       res.redirect('/');
+    }else{
+      res.redirect('/login');
     }
   })
-  
 })
 
 router.get('/login', function(req, res, next) {
