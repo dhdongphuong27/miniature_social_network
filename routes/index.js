@@ -43,7 +43,10 @@ router.post('/login', function(req, res, next){
       req.session.user = JSON.stringify(user);
       res.redirect('/');
     }
-  });
+  }).catch((err) => {
+    console.log(err)
+    res.redirect('/login')
+  })
   
 })
 
