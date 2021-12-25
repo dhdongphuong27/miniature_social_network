@@ -59,7 +59,7 @@ router.get('/createacc', isLoggedIn, isAdminMiddleware, function(req, res, next)
   res.render('createacc', { user: getUserfromSession(req) });
 })
 router.get('/faculty', isLoggedIn, isAdminMiddleware, function (req, res, next) {
-  res.render('listfaculty', { user: getUserfromSession(req) });
+  res.render('liststudent', { user: getUserfromSession(req) });
 })
 router.get('/student', isLoggedIn, isAdminMiddleware, function (req, res, next) {
   res.render('liststudent', { user: getUserfromSession(req) });
