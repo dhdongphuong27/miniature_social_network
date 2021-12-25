@@ -39,6 +39,7 @@ router.post('/login', function(req, res, next){
 
   User.findOne({ email: req.body.email }, function (err, user) {
     if (err){
+      console.log(err)
       res.redirect('/login');
     }
     else if (req.body.password == user.password)
