@@ -3,8 +3,6 @@ var socket = io();
 $(document).ready(function () {
     var path = window.location.pathname;
     var page = path.split("/").pop();
-    
-    
 
     if (document.querySelector("#userrole").innerHTML =="student"){
         socket.on('notification', function (msg) {
@@ -432,11 +430,13 @@ function searchNoti(notiPageNum){
     category = document.querySelector("#category").value;
     titlesearch = document.querySelector("#titlesearch").value;
     contentsearch = document.querySelector("#contentsearch").value;
-    if (document.getElementById('isMine').checked){
-        ownerId = document.getElementById('isMine').value;
-    } else {
-        ownerId = "";
+    ownerId = "";
+    if (document.getElementById("userrole")==="faculty"){
+        if (document.getElementById('isMine').checked) {
+            ownerId = document.getElementById('isMine').value;
+        }
     }
+    
     getNumberofPages(category, titlesearch, contentsearch, ownerId)
     resetActivePage() 
     getSpecificNotifications(category, titlesearch, contentsearch, notiPageNum, ownerId, 10)
