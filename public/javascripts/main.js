@@ -101,9 +101,18 @@ $(document).ready(function () {
         getSpecificNotifications(category, titlesearch, contentsearch, notiPageNum, "", 10)
         getNumberofPages("", "", "", "");
         document.getElementById("searchNoti").addEventListener('click', e => searchNoti(notiPageNum))
-        document.getElementById("isMine").addEventListener('click', e => myNoti(e, notiPageNum))
-        document.getElementById("prev").addEventListener('click', e => previousNoti())
-        document.getElementById("next").addEventListener('click', e => nextNoti())
+        try{
+            document.getElementById("isMine").addEventListener('click', e => myNoti(e, notiPageNum))
+        }catch(e){
+            
+        }
+        
+        document.getElementById("prevBtn").onclick = function(){
+            $(".active").prev().click();
+        }
+        document.getElementById("nextBtn").onclick = function () {
+            $(".active").next().click();
+        }
     }
     else if (page =="createacc")
     {
@@ -457,12 +466,6 @@ function myNoti(e, notiPageNum){
     resetActivePage()
     
     getSpecificNotifications(category, titlesearch, contentsearch, notiPageNum, ownerId, 10)
-}
-function previousNoti(){
-    $(".active").prev().click()
-}
-function nextNoti() {
-    $(".active").next().click()
 }
 function getSpecificNotifications(facultyid, title, content, notiPageNum, ownerId, notiLimit){
     if (facultyid === "") facultyid = "-";
