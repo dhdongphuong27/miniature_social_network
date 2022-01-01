@@ -445,11 +445,15 @@ function myNoti(e, notiPageNum){
     category = document.querySelector("#category").value;
     titlesearch = document.querySelector("#titlesearch").value;
     contentsearch = document.querySelector("#contentsearch").value;
-    if (document.getElementById('isMine').checked){
-        ownerId = document.getElementById('isMine').value;
-    }else{
-        ownerId = "";
+    ownerId = "";
+    try{
+        if (document.getElementById('isMine').checked) {
+            ownerId = document.getElementById('isMine').value;
+        }
+    }catch(e){
+        
     }
+    
     getNumberofPages(category, titlesearch, contentsearch, ownerId)
     resetActivePage()
     
